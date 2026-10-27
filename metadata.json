@@ -1,0 +1,6 @@
+{
+  "name": "CS50 Maestro Tutor — Socratic & Feynman Programming Mentor",
+  "description": "Plataforma de mentoría socrática inspirada en CS50 de Harvard y la técnica Feynman, con evaluación adaptativa, repetición espaciada, sandbox de código, vídeo sincronizado y proyectos de IA.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

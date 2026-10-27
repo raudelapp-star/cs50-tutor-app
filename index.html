@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es" class="dark">
+  <head>
+    <script>
+      (function () {
+        try {
+          var ensureWritableFetch = function (target) {
+            if (!target) return;
+            var desc = Object.getOwnPropertyDescriptor(target, 'fetch');
+            if (desc && desc.get && !desc.set && desc.configurable) {
+              var origGet = desc.get;
+              var customVal;
+              Object.defineProperty(target, 'fetch', {
+                configurable: true,
+                enumerable: desc.enumerable !== false,
+                get: function () {
+                  return customVal !== undefined ? customVal : origGet.call(window);
+                },
+                set: function (fn) {
+                  if (typeof fn === 'function') customVal = fn;
+                },
+              });
+            }
+          };
+          ensureWritableFetch(window);
+          ensureWritableFetch(Object.getPrototypeOf(window));
+          if (typeof Window !== 'undefined') ensureWritableFetch(Window.prototype);
+
+          var origDefineProperty = Object.defineProperty;
+          Object.defineProperty = function (obj, prop, descriptor) {
+            if (
+              prop === 'fetch' &&
+              (obj === window || (typeof Window !== 'undefined' && obj === Window.prototype)) &&
+              descriptor &&
+              descriptor.get &&
+              !descriptor.set
+            ) {
+              var getter = descriptor.get;
+              var assigned;
+              return origDefineProperty.call(Object, obj, prop, {
+                configurable: true,
+                enumerable: descriptor.enumerable !== false,
+                get: function () {
+                  return assigned !== undefined ? assigned : getter.call(window);
+                },
+                set: function (fn) {
+                  if (typeof fn === 'function') assigned = fn;
+                },
+              });
+            }
+            return origDefineProperty.call(Object, obj, prop, descriptor);
+          };
+
+          window.addEventListener(
+            'error',
+            function (ev) {
+              if (ev && ev.message && ev.message.indexOf('Cannot set property fetch') !== -1) {
+                ev.preventDefault();
+                ev.stopImmediatePropagation();
+              }
+            },
+            true
+          );
+        } catch (_) {}
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CS50 Maestro Tutor — Socratic &amp; Feynman Programming Mentor</title>
+    <meta name="description" content="Plataforma de mentoría socrática inspirada en CS50 de Harvard y la técnica Feynman, con evaluación adaptativa, repetición espaciada, sandbox de código, vídeo sincronizado y proyectos de IA." />
+    <meta property="og:title" content="CS50 Maestro Tutor — Socratic &amp; Feynman Programming Mentor" />
+    <meta property="og:description" content="Plataforma de mentoría socrática inspirada en CS50 de Harvard y la técnica Feynman, con evaluación adaptativa, repetición espaciada, sandbox de código, vídeo sincronizado y proyectos de IA." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-slate-950 text-slate-100 antialiased selection:bg-amber-500/30 selection:text-amber-200">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

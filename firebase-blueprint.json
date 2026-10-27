@@ -1,0 +1,247 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Student profile and overall CS50 learning state",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID of the student",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Student display name",
+          "maxLength": 100
+        },
+        "currentModuleId": {
+          "type": "string",
+          "description": "Current active CS50 module ID",
+          "maxLength": 64
+        },
+        "currentLevel": {
+          "type": "integer",
+          "description": "Current Socratic cycle level (1 to 4)"
+        },
+        "streakDays": {
+          "type": "integer",
+          "description": "Consecutive study days"
+        },
+        "totalStudyMinutes": {
+          "type": "integer",
+          "description": "Total minutes studied"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Account creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Profile update timestamp"
+        }
+      },
+      "required": [
+        "uid",
+        "displayName",
+        "currentModuleId",
+        "currentLevel",
+        "streakDays",
+        "totalStudyMinutes",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "TopicProgress": {
+      "title": "TopicProgress",
+      "description": "Mastery level, spaced repetition schedule, and exercise metrics for a specific topic",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "Student UID who owns this topic record",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "moduleId": {
+          "type": "string",
+          "description": "ID of the CS50 module (e.g., module-0, module-1)",
+          "maxLength": 64
+        },
+        "topicName": {
+          "type": "string",
+          "description": "Name of the programming concept",
+          "maxLength": 120
+        },
+        "status": {
+          "type": "string",
+          "description": "Mastery state of the concept",
+          "enum": ["pending", "in_progress", "mastered"],
+          "maxLength": 32
+        },
+        "socraticLevel": {
+          "type": "integer",
+          "description": "Completed level in the 4-stage learning cycle (1-4)"
+        },
+        "attempts": {
+          "type": "integer",
+          "description": "Number of exercise attempts"
+        },
+        "hintsUsed": {
+          "type": "integer",
+          "description": "Number of Socratic hints requested"
+        },
+        "intervalDays": {
+          "type": "integer",
+          "description": "Current spaced repetition interval in days (1, 3, 7, 14)"
+        },
+        "nextReviewDate": {
+          "type": "string",
+          "description": "ISO date string for next spaced repetition review",
+          "maxLength": 40
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp"
+        }
+      },
+      "required": [
+        "ownerId",
+        "moduleId",
+        "topicName",
+        "status",
+        "socraticLevel",
+        "attempts",
+        "hintsUsed",
+        "intervalDays",
+        "nextReviewDate",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ErrorRecord": {
+      "title": "ErrorRecord",
+      "description": "Recurrent programming error or misconception logged for adaptive practice",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "Student UID",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "moduleId": {
+          "type": "string",
+          "description": "Module where the error occurred",
+          "maxLength": 64
+        },
+        "errorCategory": {
+          "type": "string",
+          "description": "Category of the error (e.g., off-by-one, pointer-deref, syntax)",
+          "maxLength": 80
+        },
+        "causeDescription": {
+          "type": "string",
+          "description": "Root cause and Socratic diagnostic note",
+          "maxLength": 600
+        },
+        "occurrences": {
+          "type": "integer",
+          "description": "Number of times this error recurred"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "First occurrence timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Most recent occurrence timestamp"
+        }
+      },
+      "required": [
+        "ownerId",
+        "moduleId",
+        "errorCategory",
+        "causeDescription",
+        "occurrences",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "TutorSession": {
+      "title": "TutorSession",
+      "description": "Saved Socratic conversation and daily 2-hour session summary",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "Student UID",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "moduleId": {
+          "type": "string",
+          "description": "CS50 Module ID",
+          "maxLength": 64
+        },
+        "messagesJson": {
+          "type": "string",
+          "description": "Serialized conversation transcript bounded to 50KB",
+          "maxLength": 50000
+        },
+        "markdownSummary": {
+          "type": "string",
+          "description": "Exportable Markdown progress log",
+          "maxLength": 10000
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Session creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Session update timestamp"
+        }
+      },
+      "required": [
+        "ownerId",
+        "moduleId",
+        "messagesJson",
+        "markdownSummary",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Student profiles indexed by Firebase Auth UID"
+    },
+    "/topicProgress/{progressId}": {
+      "schema": { "$ref": "#/entities/TopicProgress" },
+      "description": "Mastery and spaced repetition records per student and topic"
+    },
+    "/errorRecords/{errorId}": {
+      "schema": { "$ref": "#/entities/ErrorRecord" },
+      "description": "Recurrent programming errors tracked per student"
+    },
+    "/tutorSessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/TutorSession" },
+      "description": "Socratic tutor conversation transcripts and progress summaries"
+    }
+  }
+}

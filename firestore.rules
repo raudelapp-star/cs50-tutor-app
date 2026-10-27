@@ -1,0 +1,277 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global Primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function userExists(uid) {
+      return exists(/databases/$(database)/documents/users/$(uid));
+    }
+
+    // Validation Blueprints
+    function isValidUserProfile(data) {
+      return data.keys().hasAll([
+        'uid',
+        'displayName',
+        'currentModuleId',
+        'currentLevel',
+        'streakDays',
+        'totalStudyMinutes',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'uid',
+        'displayName',
+        'currentModuleId',
+        'currentLevel',
+        'streakDays',
+        'totalStudyMinutes',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.uid is string && data.uid.size() >= 1 && data.uid.size() <= 128 && data.uid.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.uid == request.auth.uid &&
+      data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 100 &&
+      data.currentModuleId is string && data.currentModuleId.size() >= 1 && data.currentModuleId.size() <= 64 &&
+      data.currentLevel is int && data.currentLevel >= 1 && data.currentLevel <= 4 &&
+      data.streakDays is int && data.streakDays >= 0 && data.streakDays <= 10000 &&
+      data.totalStudyMinutes is int && data.totalStudyMinutes >= 0 && data.totalStudyMinutes <= 10000000 &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    function isValidTopicProgress(data) {
+      return data.keys().hasAll([
+        'ownerId',
+        'moduleId',
+        'topicName',
+        'status',
+        'socraticLevel',
+        'attempts',
+        'hintsUsed',
+        'intervalDays',
+        'nextReviewDate',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'ownerId',
+        'moduleId',
+        'topicName',
+        'status',
+        'socraticLevel',
+        'attempts',
+        'hintsUsed',
+        'intervalDays',
+        'nextReviewDate',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.ownerId is string && data.ownerId.size() >= 1 && data.ownerId.size() <= 128 && data.ownerId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.ownerId == request.auth.uid &&
+      data.moduleId is string && data.moduleId.size() >= 1 && data.moduleId.size() <= 64 &&
+      data.topicName is string && data.topicName.size() >= 1 && data.topicName.size() <= 120 &&
+      data.status is string && data.status.size() <= 32 && data.status in ['pending', 'in_progress', 'mastered'] &&
+      data.socraticLevel is int && data.socraticLevel >= 1 && data.socraticLevel <= 4 &&
+      data.attempts is int && data.attempts >= 0 && data.attempts <= 100000 &&
+      data.hintsUsed is int && data.hintsUsed >= 0 && data.hintsUsed <= 100000 &&
+      data.intervalDays is int && data.intervalDays >= 0 && data.intervalDays <= 3650 &&
+      data.nextReviewDate is string && data.nextReviewDate.size() >= 1 && data.nextReviewDate.size() <= 40 &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    function isValidErrorRecord(data) {
+      return data.keys().hasAll([
+        'ownerId',
+        'moduleId',
+        'errorCategory',
+        'causeDescription',
+        'occurrences',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'ownerId',
+        'moduleId',
+        'errorCategory',
+        'causeDescription',
+        'occurrences',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.ownerId is string && data.ownerId.size() >= 1 && data.ownerId.size() <= 128 && data.ownerId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.ownerId == request.auth.uid &&
+      data.moduleId is string && data.moduleId.size() >= 1 && data.moduleId.size() <= 64 &&
+      data.errorCategory is string && data.errorCategory.size() >= 1 && data.errorCategory.size() <= 80 &&
+      data.causeDescription is string && data.causeDescription.size() >= 1 && data.causeDescription.size() <= 600 &&
+      data.occurrences is int && data.occurrences >= 1 && data.occurrences <= 100000 &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    function isValidTutorSession(data) {
+      return data.keys().hasAll([
+        'ownerId',
+        'moduleId',
+        'messagesJson',
+        'markdownSummary',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'ownerId',
+        'moduleId',
+        'messagesJson',
+        'markdownSummary',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      data.ownerId is string && data.ownerId.size() >= 1 && data.ownerId.size() <= 128 && data.ownerId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.ownerId == request.auth.uid &&
+      data.moduleId is string && data.moduleId.size() >= 1 && data.moduleId.size() <= 64 &&
+      data.messagesJson is string && data.messagesJson.size() >= 2 && data.messagesJson.size() <= 50000 &&
+      data.markdownSummary is string && data.markdownSummary.size() >= 1 && data.markdownSummary.size() <= 10000 &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    // Collection: /users/{userId}
+    match /users/{userId} {
+      allow get: if isSignedIn() && isValidId(userId) && userId == request.auth.uid;
+      allow list: if false;
+      allow create: if isVerifiedUser() &&
+        isValidId(userId) &&
+        userId == request.auth.uid &&
+        isValidUserProfile(incoming()) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+      allow update: if isVerifiedUser() &&
+        isValidId(userId) &&
+        userId == request.auth.uid &&
+        isValidUserProfile(incoming()) &&
+        incoming().uid == existing().uid &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'displayName',
+          'currentModuleId',
+          'currentLevel',
+          'streakDays',
+          'totalStudyMinutes',
+          'updatedAt'
+        ]);
+      allow delete: if false;
+    }
+
+    // Collection: /topicProgress/{progressId}
+    match /topicProgress/{progressId} {
+      allow get: if isSignedIn() && isValidId(progressId) && existing().ownerId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow create: if isVerifiedUser() &&
+        isValidId(progressId) &&
+        isValidTopicProgress(incoming()) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time &&
+        userExists(request.auth.uid);
+      allow update: if isVerifiedUser() &&
+        isValidId(progressId) &&
+        isValidTopicProgress(incoming()) &&
+        existing().ownerId == request.auth.uid &&
+        incoming().ownerId == existing().ownerId &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'moduleId',
+          'topicName',
+          'status',
+          'socraticLevel',
+          'attempts',
+          'hintsUsed',
+          'intervalDays',
+          'nextReviewDate',
+          'updatedAt'
+        ]) &&
+        userExists(request.auth.uid);
+      allow delete: if isVerifiedUser() && isValidId(progressId) && existing().ownerId == request.auth.uid;
+    }
+
+    // Collection: /errorRecords/{errorId}
+    match /errorRecords/{errorId} {
+      allow get: if isSignedIn() && isValidId(errorId) && existing().ownerId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow create: if isVerifiedUser() &&
+        isValidId(errorId) &&
+        isValidErrorRecord(incoming()) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time &&
+        userExists(request.auth.uid);
+      allow update: if isVerifiedUser() &&
+        isValidId(errorId) &&
+        isValidErrorRecord(incoming()) &&
+        existing().ownerId == request.auth.uid &&
+        incoming().ownerId == existing().ownerId &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'causeDescription',
+          'occurrences',
+          'updatedAt'
+        ]) &&
+        userExists(request.auth.uid);
+      allow delete: if isVerifiedUser() && isValidId(errorId) && existing().ownerId == request.auth.uid;
+    }
+
+    // Collection: /tutorSessions/{sessionId}
+    match /tutorSessions/{sessionId} {
+      allow get: if isSignedIn() && isValidId(sessionId) && existing().ownerId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow create: if isVerifiedUser() &&
+        isValidId(sessionId) &&
+        isValidTutorSession(incoming()) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time &&
+        userExists(request.auth.uid);
+      allow update: if isVerifiedUser() &&
+        isValidId(sessionId) &&
+        isValidTutorSession(incoming()) &&
+        existing().ownerId == request.auth.uid &&
+        incoming().ownerId == existing().ownerId &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'moduleId',
+          'messagesJson',
+          'markdownSummary',
+          'updatedAt'
+        ]) &&
+        userExists(request.auth.uid);
+      allow delete: if isVerifiedUser() && isValidId(sessionId) && existing().ownerId == request.auth.uid;
+    }
+  }
+}
