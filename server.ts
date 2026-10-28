@@ -595,6 +595,69 @@ ${appContext?.progressSummaryText ? `\nESTADO REAL DE PROGRESO Y MEMORIA DEL ALU
         parts: [{ text: m.content }],
       }));
 
+      // Video-Anchored Socratic Tutor & Hint Mode (Strict Class & Chapter Grounding, Feynman Everyday Analogy)
+      if (mode === 'short-hint' || mode === 'video-anchored') {
+        const isClassZero =
+          currentModule?.id === 'module-0' || currentModule?.language === 'scratch';
+        const chaptersList = Array.isArray(currentModule?.simpleVideoExplanations)
+          ? currentModule.simpleVideoExplanations
+              .map((c: { chapterTitle?: string; analogyTitle?: string }) => `${c.chapterTitle} (${c.analogyTitle})`)
+              .join(' | ')
+          : currentModule?.verifiedTopics || '';
+
+        const studentQuestion =
+          req.body?.questionText ||
+          (messages && messages.length > 0 ? messages[messages.length - 1]?.content : '') ||
+          'Dame una pista sobre cómo avanzar en este reto basándote en el vídeo de esta clase.';
+
+        const strictVideoSystemInstruction = `Eres el Tutor de CS50 de Harvard en Español, especialista en el método Feynman.
+ESTÁS ANCLADO EXCLUSIVAMENTE A LA CLASE Y VÍDEO ACTUAL: "${currentModule?.weekLabel || 'Clase 0'}: ${currentModule?.title || 'Pensamiento Computacional y Scratch'}".
+
+REGLAS ESTRICTAS E INQUEBRANTABLES (CERO HUMO):
+1. RESTRICCIÓN AL VÍDEO ACTUAL: Solo puedes responder basándote en el contenido de la clase y capítulos de este vídeo (${chaptersList}).
+2. PROHIBIDO USAR CLASES FUTURAS: ${currentModule?.allowedConceptsConstraint || 'Tiene terminantemente prohibido mencionar conceptos de clases posteriores.'}
+   ${isClassZero ? '⚠️ ESTÁS EN LA CLASE 0 (SCRATCH): Está TERMINANTEMENTE PROHIBIDO hablar de Python, C, bucles while en texto o punteros. Tus pistas deben orientar SIEMPRE sobre qué bloques visuales de Scratch usar (ej. bloque amarillo "Al hacer clic en bandera verde", bloque naranja "Por siempre" o "Repetir", bloque "Si... entonces", bloque de Variable "puntos", o "Enviar mensaje") y cómo encajarlos como piezas de LEGO.' : ''}
+3. FORMATO PEDAGÓGICO FEYNMAN OBLIGATORIO:
+   - Tu respuesta DEBE comenzar SIEMPRE exactamente con esta línea indicando el capítulo del vídeo:
+     📍 En este vídeo (Capítulo: [Nombre del tema o parte del vídeo]):
+   - Explica SIEMPRE usando una comparación sencilla de la vida cotidiana (bombillas, recetas de cocina, piezas de LEGO, taquillas, vasos de agua, etc.).
+   - Máximo 3 párrafos cortos y directos.
+   - Nunca entregues el código escrito completo resuelto.`;
+
+        const { response, actualModelUsed } = await generateWithRetryAndVerifiedFallback({
+          preferredModel: 'gemini-3.1-flash-lite',
+          contents: `CLASE ACTUAL: ${currentModule?.weekLabel || 'Clase 0'} — ${currentModule?.title || ''}
+CAPÍTULOS DEL VÍDEO: ${chaptersList}
+RETO ACTUAL: ${currentModule?.officialExercise?.title || currentModule?.starterChallengeTitle || ''}
+OBJETIVO DEL RETO: ${currentModule?.officialExercise?.goal || ''}
+REQUISITOS: ${Array.isArray(currentModule?.officialExercise?.specs) ? currentModule.officialExercise.specs.join(' | ') : ''}
+${!isClassZero && studentCode ? `CÓDIGO ACTUAL DEL ALUMNO:\n\`\`\`\n${studentCode}\n\`\`\`` : ''}
+${!isClassZero && req.body?.terminalOutput ? `SALIDA/ERROR EN TERMINAL:\n\`\`\`\n${req.body.terminalOutput}\n\`\`\`` : ''}
+
+CONSULTA O SOLICITUD DE PISTA DEL ALUMNO (Pista #${HintStep || 1}):
+"${studentQuestion}"
+
+Recuerda: empieza OBLIGATORIAMENTE con "📍 En este vídeo (Capítulo: ...):" seguido de tu explicación cotidiana en máximo 3 párrafos cortos.`,
+          config: {
+            systemInstruction: strictVideoSystemInstruction,
+          },
+        });
+
+        let hintReply =
+          (response.text || '').trim() ||
+          `📍 En este vídeo (Capítulo: ${currentModule?.title || 'Concepto Principal'}): Piensa en el problema como una receta paso a paso y revisa qué requisito del reto quieres completar primero.`;
+
+        if (!hintReply.startsWith('📍')) {
+          hintReply = `📍 En este vídeo (Capítulo: ${currentModule?.weekLabel || 'Clase actual'} — ${currentModule?.title || 'Concepto clave'}):\n\n${hintReply}`;
+        }
+
+        return res.json({
+          hint: hintReply,
+          socraticReply: hintReply,
+          modelUsed: actualModelUsed,
+        });
+      }
+
       // Mode 0: AI Global Assistant Mode (Natural Language Search, Navigation, Exercise Launching, Progress Queries, and Confirmation-Gated State Changes)
       if (mode === 'global-assistant') {
         const assistantSystemInstruction = `${CS50_SYSTEM_INSTRUCTION}

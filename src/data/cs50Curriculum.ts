@@ -1,3 +1,20 @@
+export interface SimpleVideoConcept {
+  chapterTitle: string;
+  analogyTitle: string;
+  paragraphs: string[];
+}
+
+export interface OfficialCS50Exercise {
+  title: string;
+  notesUrl: string;
+  psetUrl: string;
+  goal: string;
+  specs: string[];
+  usageExample?: string;
+  check50: string;
+  submit50: string;
+}
+
 export interface CS50Module {
   id: string;
   weekLabel: string;
@@ -5,642 +22,769 @@ export interface CS50Module {
   subtitle: string;
   videoUrl: string;
   youtubeId: string;
-  language: 'python' | 'c' | 'javascript' | 'sql';
+  language: 'scratch' | 'python' | 'c' | 'javascript' | 'sql';
   verifiedTopics: string;
   realWorldUseCase: string;
   feynmanPrompt: string;
   starterChallengeTitle: string;
   starterCode: string;
+  officialExercise: OfficialCS50Exercise;
+  simpleVideoExplanations: SimpleVideoConcept[];
+  allowedConceptsConstraint: string;
   isAiExtension?: boolean;
 }
 
-export const INITIAL_CLASS_0_WELCOME = `¡Bienvenido a **CS50 Maestro Tutor**!
-
-A partir de hoy trabajarás conmigo como tu mentor personal de programación, combinando el rigor y la energía de **David J. Malan (CS50x de Harvard)**, la **técnica Feynman** y el **aprendizaje activo**.
-
-### Cómo trabajaremos (Confirmación de tu punto de partida y meta)
-- **Partes desde cero**: No necesitas conocimientos previos. Mi prioridad absoluta es que aprendas a **pensar como programador** (resolver problemas con lógica y criterio propio), no que memorices sintaxis ni que dependas de la IA para que te escriba el código.
-- **Tu objetivo final**: Construir aplicaciones reales, automatizaciones y soluciones de **Inteligencia Artificial** entendiendo qué ocurre por debajo.
-- **Sesiones diarias de 2 horas**: Divididas en recuperación activa (10 min), concepto nuevo y vídeo (20 min), práctica guiada (40 min), reto práctico (35 min) y cierre Feynman con registro de progreso (15 min).
-- **Ciclo obligatorio de 4 niveles**: Cada concepto pasará por *1. Comprensión*, *2. Construcción*, *3. Aplicación* y *4. Dominio*. **Nunca resolveré los ejercicios por ti**: si te bloqueas, te guiaré con pistas graduales y preguntas socráticas.
-
-### Ruta Resumida (De Cero a Ingeniería de IA)
-1. **Fundamentos y Pensamiento Computacional** (Clase 0: Algoritmos, binario, abstracción).
-2. **Bajo nivel y rigor mental en C** (Clases 1 a 5: Condiciones, 'loops', 'arrays', eficiencia algorítmica O(n), memoria, 'pointers' y estructuras de datos).
-3. **Alto nivel, Datos y Web** (Clases 6 a 9: 'Python', 'SQL', 'HTML/CSS/JS', 'Flask', 'APIs' y 'JSON').
-4. **Inteligencia Artificial y Automatización Aplicada** (Clase Especial IA + Proyectos Guiados: Modelos de lenguaje, llamadas a APIs, persistencia, evaluación de costes/límites y proyecto final).
-
----
-
-📺 **RECURSO DE VÍDEO**
-
-**Tema:** Pensamiento Computacional y Algoritmos (Clase 0)
-
-**Vídeo recomendado:** https://www.youtube.com/watch?v=nfYOp3_SyqM
-
-**Qué estudiar:** Representación de información (sistema binario y ASCII), qué es un algoritmo como caja negra entre 'input' y 'output', el ejemplo clásico de buscar un nombre en una guía telefónica (búsqueda lineal vs. dividir a la mitad) y cómo expresar soluciones en 'pseudocode'. *(Contenido verificado del programa introductorio de CS50x; revisa la primera mitad de la clase para la demostración de la guía telefónica).*
-
----
-
-### Nivel 1. Comprensión: ¿Qué es realmente un Algoritmo?
-
-Antes de tocar un solo lenguaje de programación, piensa en una computadora como una máquina extremadamente rápida pero completamente literal: **no intuye nada**.
-
-Un **algoritmo** ('algorithm') no es más que una secuencia de instrucciones paso a paso, precisas y sin ambigüedad, para transformar una entrada ('input') en un resultado ('output').
-
-Imagina la analogía clásica de David J. Malan en la Clase 0: tienes una **guía telefónica física de 1.000 páginas** ordenada alfabéticamente de la A a la Z, y buscas a **"John Harvard"**.
-- **Enfoque A**: Abres la página 1, miras si está John Harvard. Si no, pasas a la página 2, luego a la 3, una por una.
-- **Enfoque B**: Abres el libro exactamente por la mitad (página 500). Ves la letra "M". Como sabes que la "J" va *antes* que la "M", descartas de golpe las 500 páginas de la derecha y vuelves a dividir por la mitad las 500 páginas que te quedan.
-
-### Primer Ejercicio (Sin código)
-Supón que el año que viene la guía telefónica crece el doble y pasa de tener **1.000 páginas a 2.000 páginas**.
-
-**Pregunta única para ti:**
-En el peor de los casos, ¿cuántos pasos adicionales tendrás que dar con el **Enfoque A** frente a cuántos pasos adicionales necesitarás con el **Enfoque B** para encontrar a alguien en esa nueva guía de 2.000 páginas?`;
+export const INITIAL_CLASS_0_WELCOME = `¡Bienvenido a **CS50 en Español — Harvard**!`;
 
 export const CS50_MODULES: CS50Module[] = [
   {
     id: 'module-0',
     weekLabel: 'Clase 0',
     title: 'Pensamiento Computacional, Algoritmos y Scratch',
-    subtitle: 'Representación binaria, abstracción, pseudocode y eficiencia intuitiva',
+    subtitle: 'Binario con bombillas, guía telefónica y bloques visuales en Scratch',
     videoUrl: 'https://www.youtube.com/watch?v=nfYOp3_SyqM',
     youtubeId: 'nfYOp3_SyqM',
-    language: 'python',
+    language: 'c',
     verifiedTopics:
-      'Sistema binario (bits y bytes), representación de texto/color/sonido, definición de algoritmo (input -> algorithm -> output), eficiencia logarítmica con la guía telefónica y estructuras básicas (functions, conditionals, Boolean expressions, loops) en Scratch.',
+      'Sistema binario (interruptores encendido/apagado), representación de letras (ASCII), colores (RGB) y sonido, qué es un algoritmo (la guía telefónica de David J. Malan) y programación visual con bloques en Scratch (eventos, bucles, condiciones y variables).',
     realWorldUseCase:
-      'Antes de automatizar un proceso empresarial o diseñar un flujo con IA, necesitas descomponer el problema en entradas, reglas de decisión y salidas exactas sin ambigüedades.',
+      'Aprender a pensar paso a paso encajando piezas lógicas como si fueran bloques de LEGO, sin preocuparte todavía por puntos y comas ni errores de escritura.',
     feynmanPrompt:
-      'Explica con tus propias palabras, como si hablaras con alguien que nunca ha usado un ordenador, por qué dividir un problema ordenado por la mitad es radicalmente más rápido que revisar elemento por elemento.',
-    starterChallengeTitle: 'Simulador de Pseudocódigo: Búsqueda en Guía Telefónica',
-    starterCode: `# Clase 0 — Pensamiento Computacional
-# Objetivo: Completa la lógica paso a paso (sin que la IA lo haga por ti)
-# Imagina que tenemos páginas numeradas del 1 al 1000 y buscamos la página 342.
+      '¿Cómo combinarías un bloque de evento con un bloque de bucle en Scratch para que tu personaje se mueva continuamente?',
+    starterChallengeTitle: 'Problem Set 0: Proyecto Interactivo en Scratch',
+    starterCode: `// En la Clase 0 los ejercicios se realizan en la plataforma visual de Scratch (scratch.mit.edu).
+// Este editor de código se activará con compilador y terminal a partir de la Clase 1 con el Lenguaje C.
 
-low = 1
-high = 1000
-target = 342
-steps = 0
+#include <stdio.h>
 
-# TODO: Razona qué condición mantiene vivo el bucle mientras queden páginas
-# y cómo calculas el punto medio (mid) en cada paso.
-print("Iniciando simulación de búsqueda...")
+int main(void)
+{
+    printf("Hola, CS50 en Español\\n");
+    return 0;
+}
 `,
+    allowedConceptsConstraint:
+      'SOLO puedes hablar de lo visto en la Clase 0: bombillas/binario, ASCII, colores RGB, el ejemplo de romper la guía telefónica por la mitad y bloques visuales de Scratch (Al hacer clic en bandera verde, Por siempre, Repetir, Si... entonces, Variables de puntos/vidas, Enviar mensaje/broadcast y sprites). PROHIBIDO mencionar código escrito en Python, C, while, for o funciones en texto.',
+    officialExercise: {
+      title: 'Problem Set 0: Proyecto en Scratch',
+      notesUrl: 'https://cs50.harvard.edu/x/notes/0/',
+      psetUrl: 'https://cs50.harvard.edu/x/psets/0/scratch/',
+      goal: 'Crear una animación, juego o historia interactiva en la plataforma visual Scratch (https://scratch.mit.edu/) utilizando bloques lógicos.',
+      specs: [
+        'Tener al menos dos personajes (sprites), de los cuales al menos uno no sea el gato predeterminado de Scratch.',
+        'Tener al menos tres pilas de bloques (scripts) en total (no necesariamente tres por cada personaje).',
+        'Utilizar al menos una condición lógica ("si... entonces" / if-then).',
+        'Utilizar al menos un bucle ("repetir" o "por siempre" / forever).',
+        'Utilizar al menos una variable (por ejemplo, marcador de puntos, vidas o temporizador).',
+        'Utilizar al menos un bloque personalizado (Mi Bloque) con una entrada, o bien difusión de mensajes / sonido.',
+      ],
+      check50: 'check50 cs50/problems/2024/x/scratch',
+      submit50: 'submit50 cs50/problems/2024/x/scratch',
+    },
+    simpleVideoExplanations: [
+      {
+        chapterTitle: 'Inicio del vídeo · El idioma de los ordenadores (Binario y Bombillas)',
+        analogyTitle: '💡 Analogía de los interruptores de luz en tu habitación',
+        paragraphs: [
+          'Un ordenador por dentro no entiende letras ni números como nosotros; solo tiene millones de diminutos interruptores eléctricos que pueden estar apagados (0) o encendidos (1). Igual que con una lámpara en tu cuarto sabes si hay alguien despierto o dormido, con un solo interruptor (llamado bit) el ordenador distingue entre dos opciones.',
+          'Cuando juntas 8 interruptores en fila (un byte), puedes crear combinaciones distintas para representar cualquier letra del teclado (como la A con el número 65), cualquier color en tu pantalla mezclando rojo, verde y azul, o las notas de una canción.',
+        ],
+      },
+      {
+        chapterTitle: 'Mitad del vídeo · ¿Qué es un Algoritmo? (La Guía Telefónica)',
+        analogyTitle: '📖 Analogía de buscar un nombre en un libro de 1.000 páginas o seguir una receta',
+        paragraphs: [
+          'Un algoritmo es simplemente una receta de cocina paso a paso para resolver un problema. En el vídeo, David J. Malan busca a "John Harvard" en una guía telefónica: si pasas las páginas de una en una desde el principio, puedes tardar 1.000 pasos si está al final.',
+          'Pero si abres el libro justo por la mitad (página 500), miras la letra y descartas de golpe la mitad donde sabes que no está, solo necesitarás dividir el libro unas 10 veces para encontrar cualquier nombre entre 1.000 páginas. Eso es pensar como programador antes de tocar el teclado.',
+        ],
+      },
+      {
+        chapterTitle: 'Segunda mitad del vídeo · Pensar con piezas de LEGO en Scratch',
+        analogyTitle: '🧩 Analogía de montar piezas de LEGO que solo encajan si tienen sentido',
+        paragraphs: [
+          'Antes de escribir código en inglés, Harvard usa Scratch porque funciona como piezas de LEGO de colores: los bloques amarillos son el disparo de salida ("Al hacer clic en la bandera verde"), los bloques naranjas repiten acciones sin cansarse ("Por siempre") y los bloques con forma de diamante hacen preguntas ("¿Estoy tocando el borde?").',
+          'Así entrenas tu mente en las 4 piezas universales de toda la programación —eventos, bucles, condiciones y variables (como una caja donde apuntas los puntos de tu juego)— sin frustrarte por olvidar un punto y coma.',
+        ],
+      },
+    ],
   },
   {
     id: 'module-1',
     weekLabel: 'Clase 1',
-    title: 'C, Tipos de Datos, Condiciones, Loops y Funciones',
-    subtitle: 'Compilación, variables tipadas, control de flujo y precisión numérica',
+    title: 'C: Tipos de Datos, Condiciones, Loops y Funciones',
+    subtitle: 'De los bloques de Scratch al código escrito en C, compilador y pirámide de Mario',
     videoUrl: 'https://www.youtube.com/watch?v=ev96qUufJYI',
     youtubeId: 'ev96qUufJYI',
     language: 'c',
     verifiedTopics:
-      'Código fuente vs código máquina, compilador, header files (#include <stdio.h>), types (int, float, char, long), conditionals (if/else), loops (while, for), abstracción en functions y límites de memoria (integer overflow, truncamiento).',
+      'Paso de bloques de Scratch a texto en C, compilador (traductor de código fuente a binario), tipos de datos (int, float, char), condicionales (if/else) y bucles (while, for) para construir la pirámide de Mario.',
     realWorldUseCase:
-      'Comprender tipos estáticos y límites numéricos evita errores financieros críticos (redondeo de coma flotante) y bucles infinitos que bloquean servidores en producción.',
+      'Escribir instrucciones exactas que un compilador traduce directamente al idioma de la máquina a máxima velocidad.',
     feynmanPrompt:
-      'Explica qué diferencia hay entre el código fuente que tú escribes en C y el archivo binario que ejecuta el procesador, y qué papel juega el compilador en medio.',
-    starterChallengeTitle: 'Pirámide de Mario y Control de Bucle en C',
+      '¿Qué bloque de Scratch equivale exactamente a escribir `for (int i = 0; i < 4; i++)` en lenguaje C?',
+    starterChallengeTitle: 'Problem Set 1: Mario (Pirámide Alineada a la Derecha en C)',
     starterCode: `#include <stdio.h>
 
 int main(void)
 {
     int height = 4;
-    // TODO: Usa bucles (for loops) anidados para imprimir una escalera de '#'
-    // Antes de escribir código, piensa: ¿cuántos espacios y cuántos '#' van en la fila i?
-    printf("Altura configurada: %d\\n", height);
+
+    // TODO: Imprime una pirámide de altura 'height' alineada a la derecha.
+    // En cada fila 'row' (de 1 a height):
+    // 1. Imprime (height - row) espacios " "
+    // 2. Imprime 'row' bloques "#"
+    // 3. Imprime un salto de línea "\\n"
+
+    printf("Height: %d\\n", height);
     return 0;
 }
 `,
+    allowedConceptsConstraint:
+      'SOLO puedes usar conceptos de la Clase 0 y Clase 1 (lenguaje C básico: printf, variables int/float/char, if/else, while, for anidados y el compilador). PROHIBIDO mencionar arrays, punteros, Python o SQL.',
+    officialExercise: {
+      title: 'Problem Set 1: Mario (Right-Aligned Pyramid)',
+      notesUrl: 'https://cs50.harvard.edu/x/notes/1/',
+      psetUrl: 'https://cs50.harvard.edu/x/psets/1/mario/less/',
+      goal: 'Recrear en lenguaje C la pirámide de bloques de Super Mario Bros. de altura `int height = 4` utilizando bucles `for` anidados para controlar cuántos espacios en blanco y cuántas almohadillas (`#`) se imprimen en cada fila.',
+      specs: [
+        'Usa la variable `int height = 4;` definida en `main(void)`.',
+        'Crea un bucle externo `for (int row = 1; row <= height; row++)` para recorrer cada piso de la pirámide.',
+        'Dentro de cada fila, usa un primer bucle interno `for` para imprimir `height - row` espacios (`printf(" ");`).',
+        'A continuación, usa un segundo bucle interno `for` para imprimir `row` caracteres `#` (`printf("#");`).',
+        'Al terminar cada fila, imprime un salto de línea con `printf("\\n");`.',
+      ],
+      usageExample: `$ ./mario
+Height: 4
+   #
+  ##
+ ###
+####`,
+      check50: 'check50 cs50/problems/2024/x/mario/less',
+      submit50: 'submit50 cs50/problems/2024/x/mario/less',
+    },
+    simpleVideoExplanations: [
+      {
+        chapterTitle: 'Inicio del vídeo · De bloques de Scratch a texto en C y el Compilador',
+        analogyTitle: '🗣️ Analogía del traductor simultáneo entre dos idiomas',
+        paragraphs: [
+          'En la Clase 0 encajabas el bloque "Decir Hola" en Scratch; en la Clase 1 escribes `printf("Hola\\n");` en lenguaje C. Es exactamente la misma idea lógica, solo que ahora la escribes con el teclado en lugar de arrastrarla con el ratón.',
+          'Como el ordenador solo entiende ceros y unos (interruptores), necesitamos un programa llamado compilador que actúa como un traductor profesional: lee tu archivo de texto en C y lo convierte en un archivo de ceros y unos listo para ejecutarse.',
+        ],
+      },
+      {
+        chapterTitle: 'Mitad del vídeo · Variables tipadas y Bucles (Loops)',
+        analogyTitle: '📦 Analogía de cajas etiquetadas según lo que guardas dentro',
+        paragraphs: [
+          'En C, cada vez que creas una variable debes ponerle una etiqueta indicando qué tipo de dato guardará: `int` es una caja solo para números enteros (como `int height = 4;`), mientras que `char` guarda una sola letra. Así el ordenador sabe exactamente cuánto espacio reservar.',
+          'Para no repetir la misma línea diez veces, usamos un bucle `for`, que es como un contador de gimnasio: empieza en la repetición 1, comprueba si ya llegó a `height`, hace el ejercicio y suma 1 en cada vuelta.',
+        ],
+      },
+      {
+        chapterTitle: 'Final del vídeo · Cómo pensar la Pirámide de Mario',
+        analogyTitle: '🧱 Analogía de colocar ladrillos fila por fila en una cuadrícula',
+        paragraphs: [
+          'En la pantalla no puedes pegar un ladrillo `#` flotando a la derecha de la nada: el cursor siempre escribe de izquierda a derecha. Por eso, para que la cima de una pirámide de 4 pisos quede a la derecha, primero debes "empujarla" imprimiendo 3 espacios invisibles y luego 1 ladrillo `#`.',
+          'En el piso 2 imprimes 2 espacios y 2 ladrillos `#`, y así sucesivamente. Si te fijas, en cada fila la suma de espacios más ladrillos siempre da la altura total.',
+        ],
+      },
+    ],
   },
   {
     id: 'module-2',
     weekLabel: 'Clase 2',
-    title: 'Arrays, Strings, Argumentos de Línea de Comandos y Criptografía',
-    subtitle: 'Memoria contigua, caracteres NUL (\\0), debugging y cifrado clásico',
+    title: 'Arrays, Strings, Argumentos CLI y Criptografía',
+    subtitle: 'Taquillas en fila (arrays), textos como cadenas de letras y cifrado César',
     videoUrl: 'https://www.youtube.com/watch?v=G7erq8mRYdk',
     youtubeId: 'G7erq8mRYdk',
     language: 'c',
     verifiedTopics:
-      'Las 4 fases de compilación (preprocessing, compiling, assembling, linking), herramientas de debugging, arrays en memoria contigua, strings como arrays de char terminados en \\0, argc/argv y bases de criptografía (Caesar/Substitution).',
+      'Cómo se guarda una lista de datos en memoria contigua (arrays), strings como filas de letras terminadas en el centinela \\0, recorrer letra por letra con un bucle y desplazar letras para cifrar mensajes (Caesar).',
     realWorldUseCase:
-      'Toda entrada de texto, tokenización para modelos de lenguaje (LLMs) y procesamiento de lotes de datos se apoya en recorrer secuencias indexadas sin salirse de sus límites (off-by-one errors).',
+      'Procesar cualquier palabra, contraseña o mensaje de texto recorriendo sus letras una por una y transformándolas según una regla.',
     feynmanPrompt:
-      '¿Por qué un string en C necesita un byte extra oculto al final (\\0) y qué pasa si intentas leer una posición más allá del tamaño de un array?',
-    starterChallengeTitle: 'Inspección de Strings y Desplazamiento de Caracteres',
+      '¿Por qué el ordenador coloca un símbolo especial invisible (`\\0`) justo después de la última letra de una palabra guardada en memoria?',
+    starterChallengeTitle: 'Problem Set 2: Caesar (Cifrado por Desplazamiento ASCII)',
     starterCode: `#include <stdio.h>
 
 int main(void)
 {
-    char word[] = "HI!";
-    // TODO: Imprime cada carácter y su valor numérico ASCII
-    // ¿Qué hay en word[3]? Comprúebalo tú mismo.
-    printf("Palabra: %s\\n", word);
+    char plaintext[] = "HELLO";
+    int key = 1;
+
+    printf("Plaintext: %s\\n", plaintext);
+    // TODO: Recorre cada carácter de plaintext hasta encontrar '\\0'
+    // Desplaza cada letra mayúscula usando la fórmula:
+    // char rotated = ((plaintext[i] - 'A' + key) % 26) + 'A';
+    // e imprime el resultado en "Ciphertext: "
+
     return 0;
 }
 `,
+    allowedConceptsConstraint:
+      'SOLO puedes usar conceptos hasta la Clase 2 de CS50 (C básico, arrays, strings con \\0, código ASCII y cifrado César). PROHIBIDO hablar de punteros avanzados, malloc, Python o SQL.',
+    officialExercise: {
+      title: 'Problem Set 2: Caesar Cipher',
+      notesUrl: 'https://cs50.harvard.edu/x/notes/2/',
+      psetUrl: 'https://cs50.harvard.edu/x/psets/2/caesar/',
+      goal: 'Cifrar un mensaje de texto (`char plaintext[]`) desplazando cada letra en el alfabeto según una clave numérica (`int key`) aplicando la rueda del abecedario `(c - \'A\' + key) % 26 + \'A\'`.',
+      specs: [
+        'Mantén el arreglo `char plaintext[] = "HELLO";` y la clave `int key = 1;`.',
+        'Recorre el arreglo con un bucle `for (int i = 0; plaintext[i] != \'\\0\'; i++)`.',
+        'Para cada letra mayúscula, conviértela a posición del abecedario (`0` a `25`) restando `\'A\'`, suma `key`, aplica `% 26` y vuelve a sumar `\'A\'`.',
+        'Imprime el texto cifrado precedido por `Ciphertext: ` y finaliza con `\\n`.',
+      ],
+      usageExample: `$ ./caesar
+Plaintext: HELLO
+Ciphertext: IFMMP`,
+      check50: 'check50 cs50/problems/2024/x/caesar',
+      submit50: 'submit50 cs50/problems/2024/x/caesar',
+    },
+    simpleVideoExplanations: [
+      {
+        chapterTitle: 'Primera parte del vídeo · ¿Qué es un Array?',
+        analogyTitle: '🗄️ Analogía de una fila de taquillas numeradas desde el 0',
+        paragraphs: [
+          'En lugar de crear veinte variables sueltas (`nota1`, `nota2`, `nota3`...), un array es como un pasillo de taquillas de gimnasio pegadas una al lado de la otra bajo un mismo nombre. La primera taquilla siempre lleva el número 0, la segunda el 1, y así sucesivamente.',
+          'Como todas las taquillas están juntas en fila, puedes pedirle a un bucle `for` que vaya abriendo la taquilla `i` paso a paso en una fracción de segundo.',
+        ],
+      },
+      {
+        chapterTitle: 'Mitad del vídeo · Palabras (Strings) y el punto final invisible (\\0)',
+        analogyTitle: '🚂 Analogía de un tren de letras con un vagón de cola que avisa del final',
+        paragraphs: [
+          'Para el ordenador, la palabra `"HOLA"` no es más que un array de 4 taquillas seguidas con las letras `H`, `O`, `L`, `A` más una quinta taquilla extra con el símbolo `\\0` (llamado carácter nulo).',
+          'Ese `\\0` funciona como el vagón de cola de un tren: le avisa a `printf` de que ahí termina exactamente la palabra y que no debe seguir leyendo las taquillas vecinas.',
+        ],
+      },
+      {
+        chapterTitle: 'Final del vídeo · Criptografía y la rueda del Cifrado César',
+        analogyTitle: '🎡 Analogía de las agujas de un reloj que vuelven a empezar tras las 12',
+        paragraphs: [
+          'Cifrar un mensaje con el método de Julio César consiste en mover cada letra unos pasos hacia adelante en el abecedario: si la clave es 1, la `A` se convierte en `B` y `"HELLO"` se convierte en `"IFMMP"`.',
+          '¿Y qué pasa si llegas a la `Z` y sumas 1? Igual que un reloj pasa de las 12 de nuevo a la 1 usando el resto de dividir (`%`), en programación usamos `% 26` para dar la vuelta al abecedario y volver suavemente a la `A`.',
+        ],
+      },
+    ],
   },
   {
     id: 'module-3',
     weekLabel: 'Clase 3',
     title: 'Algoritmos: Búsqueda, Ordenamiento, Big O y Recursividad',
-    subtitle: 'Linear Search, Binary Search, Bubble/Selection/Merge Sort y Structs',
+    subtitle: 'Velocidad de algoritmos, ordenar cartas y muñecas rusas (recursividad)',
     videoUrl: 'https://www.youtube.com/watch?v=zU0DbilHvYM',
     youtubeId: 'zU0DbilHvYM',
     language: 'python',
     verifiedTopics:
-      'Notación asintótica (Big O, Omega, Theta), Linear Search O(n), Binary Search O(log n), Selection Sort O(n²), Bubble Sort O(n²), tipos personalizados con structs, Recursividad (caso base y caso recursivo) y Merge Sort O(n log n).',
+      'Búsqueda lineal vs búsqueda binaria, métodos para ordenar datos (Bubble Sort, Selection Sort, Merge Sort), cómo medir la rapidez (Big O) y funciones que se llaman a sí mismas con un caso base (recursividad).',
     realWorldUseCase:
-      'Cuando tu base de datos o catálogo de documentos para IA crece de 100 a 1.000.000 de registros, un algoritmo cuadrático O(n²) hace colapsar tu aplicación mientras que uno O(n log n) u O(log n) responde en milisegundos.',
+      'Elegir el método adecuado para buscar y contar datos (como votos en una elección) sin que el ordenador se vuelva lento cuando crecen los participantes.',
     feynmanPrompt:
-      'Explica por qué toda función recursiva necesita obligatoriamente un "base case" (caso base) y qué ocurre en la memoria (call stack) si lo olvidas.',
-    starterChallengeTitle: 'Comparador Empírico de Pasos: Lineal vs Binario',
-    starterCode: `# Clase 3 — Eficiencia Algorítmica y Recursividad
-# Analiza cuántos pasos toma encontrar un elemento en una lista ordenada
+      '¿Por qué no puedes aplicar búsqueda binaria sobre una lista de nombres que está desordenada?',
+    starterChallengeTitle: 'Problem Set 3: Plurality (Conteo Electoral y Búsqueda del Ganador)',
+    starterCode: `# CS50 Clase 3 — Plurality Election
+# Cuenta los votos de cada candidato y determina el ganador con mayor puntuación.
 
-def linear_search_steps(arr, target):
-    steps = 0
-    # TODO: Recorre arr y cuenta cuántos pasos necesitas hasta hallar target
-    return steps
+candidates = [
+    {"name": "Alice", "votes": 0},
+    {"name": "Bob", "votes": 0},
+    {"name": "Charlie", "votes": 0},
+]
 
-numbers = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]
-print("Pasos para buscar 72:", linear_search_steps(numbers, 72))
+ballots = ["Alice", "Bob", "Alice", "Charlie", "Alice", "Bob"]
+
+def vote(name):
+    # TODO: Busca el candidato cuyo 'name' coincida, suma 1 a 'votes' y devuelve True.
+    # Si no existe, devuelve False.
+    return False
+
+def print_winner():
+    # TODO: Encuentra el número máximo de votos e imprime el nombre del candidato ganador.
+    pass
+
+for b in ballots:
+    vote(b)
+
+print_winner()
 `,
+    allowedConceptsConstraint:
+      'SOLO puedes hablar de los conceptos de la Clase 3: búsqueda lineal, búsqueda binaria, ordenamiento (Selection/Bubble/Merge Sort), velocidad Big O, candidatos con nombre/votos y recursividad con caso base.',
+    officialExercise: {
+      title: 'Problem Set 3: Plurality Election',
+      notesUrl: 'https://cs50.harvard.edu/x/notes/3/',
+      psetUrl: 'https://cs50.harvard.edu/x/psets/3/plurality/',
+      goal: 'Implementar las funciones `vote(name)` y `print_winner()` para contabilizar papeletas electorales sobre una lista de candidatos y determinar mediante búsqueda lineal quién obtuvo el máximo número de votos.',
+      specs: [
+        'En `vote(name)`, recorre la lista `candidates`. Si `candidate["name"] == name`, incrementa `candidate["votes"] += 1` y devuelve `True`.',
+        'Si tras recorrer toda la lista el nombre no existe, `vote(name)` debe devolver `False`.',
+        'En `print_winner()`, calcula primero el valor máximo de `votes` entre todos los elementos de `candidates`.',
+        'Imprime el nombre (`candidate["name"]`) de cada candidato cuyo número de votos sea igual a ese máximo.',
+      ],
+      usageExample: `$ python3 plurality.py
+Winner: Alice (3 votes)`,
+      check50: 'check50 cs50/problems/2024/x/plurality',
+      submit50: 'submit50 cs50/problems/2024/x/plurality',
+    },
+    simpleVideoExplanations: [
+      {
+        chapterTitle: 'Inicio del vídeo · Búsqueda Lineal vs. Binaria y Big O',
+        analogyTitle: '🚪 Analogía de buscar a un amigo detrás de 10 puertas cerradas',
+        paragraphs: [
+          'Si los números detrás de las puertas están mezclados al azar, no tienes más remedio que abrir puerta por puerta desde la primera hasta la última (Búsqueda Lineal). Pero si están ordenados de menor a mayor, puedes abrir directamente la puerta del centro y descartar la mitad de las puertas en cada paso (Búsqueda Binaria).',
+          'Los informáticos llaman "Big O" simplemente a responder: "¿Cuánto más tardaré si mañana hay el doble de puertas?".',
+        ],
+      },
+      {
+        chapterTitle: 'Mitad del vídeo · Cómo ordena un ordenador (Ordenar una baraja)',
+        analogyTitle: '🃏 Analogía de ordenar las cartas que tienes en la mano',
+        paragraphs: [
+          'Cuando te reparten cartas desordenadas en un juego de mesa, sueles buscar la carta más pequeña de todas y colocarla al principio, luego la segunda más pequeña, y así hasta terminar (eso es Selection Sort).',
+          'Otra forma mucho más rápida cuando tienes miles de cartas es dividir el mazo en dos mitades, ordenar cada mitad y luego ir mezclando las dos pilas ordenadas fijándote solo en la carta superior de cada montón (Merge Sort).',
+        ],
+      },
+      {
+        chapterTitle: 'Final del vídeo · Recursividad',
+        analogyTitle: '🪆 Analogía de las muñecas rusas (Matrioskas) con una muñeca final maciza',
+        paragraphs: [
+          'Una función recursiva es una tarea que para resolverse abre una versión un poquito más pequeña de sí misma, igual que al abrir una muñeca rusa encuentras otra idéntica pero más pequeña dentro.',
+          'Para que no abras muñecas hasta el infinito, toda recursividad necesita una última muñeca pequeñita que ya no se abre (el "caso base"), momento en el que das la tarea por terminada.',
+        ],
+      },
+    ],
   },
   {
     id: 'module-4',
     weekLabel: 'Clase 4',
     title: 'Memoria, Punteros, Direcciones y Gestión Dinámica',
-    subtitle: 'Hexadecimal, & y *, malloc/free, buffer overflow, stack vs heap',
+    subtitle: 'Direcciones postales de la memoria (& y *), intercambiar vasos y punteros',
     videoUrl: 'https://www.youtube.com/watch?v=xRW70LgrEho',
     youtubeId: 'xRW70LgrEho',
     language: 'c',
     verifiedTopics:
-      'Sistema hexadecimal (0x...), direcciones de memoria (&) e indirección (*), punteros (pointers), aritmética de punteros, comparación de strings vs direcciones, asignación dinámica con malloc y liberación con free, valgrind, garbage values y el stack vs heap.',
+      'Direcciones de memoria (hexadecimal), el operador & (dime la dirección postal) y * (ve a esa dirección), por qué intercambiar dos variables requiere un vaso auxiliar (swap) y pedir memoria prestada con malloc/free.',
     realWorldUseCase:
-      'Entender referencias de memoria explica por qué al modificar una lista o diccionario dentro de una función en Python o JavaScript puedes alterar accidentalmente el objeto original en toda tu app.',
+      'Entender dónde viven realmente los datos en la memoria RAM y cómo modificar un dato original sin hacer copias innecesarias.',
     feynmanPrompt:
-      'Usa la analogía de un buzón de correo y su dirección postal para explicar la diferencia entre una variable normal, un puntero (int *p) y desreferenciar ese puntero (*p).',
-    starterChallengeTitle: 'Intercambio por Valor vs Referencia (Swap)',
+      'Si tienes un vaso lleno de zumo de naranja y otro lleno de agua, ¿por qué necesitas un tercer vaso vacío para intercambiar sus líquidos?',
+    starterChallengeTitle: 'Problem Set 4: Pointers & Swap por Referencia en Memoria',
     starterCode: `#include <stdio.h>
 
 int main(void)
 {
     int a = 10;
     int b = 20;
-    // TODO: Razona por qué hacer swap en una función sin punteros solo cambia copias locales.
-    printf("Antes: a = %d, b = %d\\n", a, b);
+
+    printf("Before swap: a = %d, b = %d\\n", a, b);
+
+    // TODO: Declara una variable temporal 'int tmp' y realiza el intercambio
+    // de valores e imprime "After swap: a = %d, b = %d\\n"
+
     return 0;
 }
 `,
+    allowedConceptsConstraint:
+      'SOLO puedes hablar de los conceptos de la Clase 4: memoria RAM, direcciones postales (&), punteros (*), el intercambio de valores con un vaso temporal (swap) y pedir/devolver memoria (malloc/free).',
+    officialExercise: {
+      title: 'Problem Set 4: Memory Swap & Pointer Indirection',
+      notesUrl: 'https://cs50.harvard.edu/x/notes/4/',
+      psetUrl: 'https://cs50.harvard.edu/x/psets/4/',
+      goal: 'Comprender cómo se intercambian dos valores en memoria utilizando una variable auxiliar `int tmp` evitando sobrescribir el valor original antes de copiarlo.',
+      specs: [
+        'Conserva las variables iniciales `int a = 10;` e `int b = 20;`.',
+        'Utiliza una variable temporal `int tmp` para guardar el valor original de `a` antes de sobrescribirlo.',
+        'Asigna el valor de `b` en `a`, y después asigna `tmp` en `b`.',
+        'Imprime el estado final exactamente con `printf("After swap: a = %d, b = %d\\n", a, b);`.',
+      ],
+      usageExample: `$ ./swap
+Before swap: a = 10, b = 20
+After swap: a = 20, b = 10`,
+      check50: 'check50 cs50/problems/2024/x/filter/less',
+      submit50: 'submit50 cs50/problems/2024/x/filter/less',
+    },
+    simpleVideoExplanations: [
+      {
+        chapterTitle: 'Inicio del vídeo · ¿Qué es un Puntero en C?',
+        analogyTitle: '📬 Analogía de la casa de tu amigo frente a su dirección escrita en un papel',
+        paragraphs: [
+          'Una variable normal (`int a = 10;`) es como una casa donde vive el número 10. Un puntero (`int *p`) no es otra casa, sino un papelito donde apuntas la calle y el número exacto donde está ubicada esa casa en la memoria del ordenador.',
+          'El símbolo `&a` significa "¿cuál es la dirección de esta casa?", mientras que el asterisco `*p` significa "camina hasta la dirección escrita en el papel y mira qué hay dentro".',
+        ],
+      },
+      {
+        chapterTitle: 'Mitad del vídeo · El problema de intercambiar dos valores (Swap)',
+        analogyTitle: '🥤 Analogía de dos vasos llenos y un tercer vaso vacío',
+        paragraphs: [
+          'Imagina que tienes zumo en el vaso `a` y leche en el vaso `b`. Si viertes directamente el vaso `b` sobre el `a`, pierdes el zumo para siempre. En programación pasa igual: si haces `a = b;`, el valor antiguo de `a` desaparece.',
+          'Por eso necesitamos un tercer vaso vacío llamado `int tmp`: primero viertes `a` en `tmp`, luego pasas `b` a `a`, y por último viertes `tmp` en `b`.',
+        ],
+      },
+    ],
   },
   {
     id: 'module-5',
     weekLabel: 'Clase 5',
     title: 'Estructuras de Datos: Listas Enlazadas, Hash Tables y Árboles',
-    subtitle: 'Queues, Stacks, Linked Lists, Binary Search Trees, Hash Functions y Tries',
+    subtitle: 'Colas de supermercado, búsquedas del tesoro y archivadores alfabéticos',
     videoUrl: 'https://www.youtube.com/watch?v=Q0xvQT87ekA',
     youtubeId: 'Q0xvQT87ekA',
     language: 'python',
     verifiedTopics:
-      'Estructuras abstractas (Queues FIFO, Stacks LIFO), redimensionar arrays vs Singly Linked Lists, Binary Search Trees (BST), Hash Tables y colisiones, Tries y el equilibrio fundamental entre tiempo de CPU y consumo de memoria.',
+      'Colas (Queues FIFO), Pilas (Stacks LIFO), Listas Enlazadas (nodos conectados por flechas), Tablas Hash (clasificar por inicial en cubetas) y Árboles de búsqueda.',
     realWorldUseCase:
-      'Los diccionarios de Python y objetos JSON que usarás todos los días con APIs de IA son Hash Tables por debajo; saber cómo funcionan te permite indexar datos en O(1).',
+      'Organizar miles de palabras o contactos en cajones ordenados por su primera letra para encontrarlos al instante.',
     feynmanPrompt:
-      '¿Qué ventaja y qué desventaja tiene una Linked List frente a un Array tradicional en cuanto a inserción de datos y búsqueda aleatoria?',
-    starterChallengeTitle: 'Simulación de Tabla Hash y Colisiones',
-    starterCode: `# Clase 5 — Estructuras de Datos
-# Diseña una función hash sencilla para palabras y observa cuándo ocurren colisiones
+      '¿En qué se parece una Tabla Hash a un archivador con 26 cajones etiquetados de la A a la Z?',
+    starterChallengeTitle: 'Problem Set 5: Speller (Función Hash y Tabla de Buckets)',
+    starterCode: `# CS50 Clase 5 — Speller Hash Table
+# Implementa una función hash que asigne cada palabra a un bucket entre 0 y N - 1.
 
-def simple_hash(word, bucket_count=10):
-    # TODO: Calcula un índice entre 0 y bucket_count - 1 a partir de los caracteres de word
+N = 26
+words = ["apple", "banana", "avocado", "blueberry", "cherry"]
+
+def hash_word(word):
+    # TODO: Devuelve el índice del bucket (0 a 25) según la primera letra de 'word'
+    # Pista: usa (ord(word[0].upper()) - ord('A')) % N
     return 0
 
-words = ["apple", "banana", "avocado", "blueberry"]
 for w in words:
-    print(w, "-> bucket:", simple_hash(w))
+    print(f"{w} -> bucket {hash_word(w)}")
 `,
+    allowedConceptsConstraint:
+      'SOLO puedes hablar de los conceptos de la Clase 5: colas, pilas, listas enlazadas, tablas hash (cajones de la A a la Z) y colisiones.',
+    officialExercise: {
+      title: 'Problem Set 5: Speller (Hash Function & Buckets)',
+      notesUrl: 'https://cs50.harvard.edu/x/notes/5/',
+      psetUrl: 'https://cs50.harvard.edu/x/psets/5/speller/',
+      goal: 'Diseñar e implementar la función `hash_word(word)` del corrector ortográfico Speller de CS50 para clasificar palabras en `N = 26` cubetas (buckets) según su letra inicial.',
+      specs: [
+        'Toma el primer carácter de la palabra en mayúscula (`word[0].upper()`) y calcula su cajón entre `0` y `25` con `(ord(word[0].upper()) - ord(\'A\')) % N`.',
+        'Recorre la lista `words` e imprime cada palabra junto con el número de bucket asignado.',
+        'Observa cómo `"apple"` y `"avocado"` caen en el mismo cajón `0` (colisión).',
+      ],
+      usageExample: `$ python3 speller.py
+apple -> bucket 0
+banana -> bucket 1
+avocado -> bucket 0
+blueberry -> bucket 1
+cherry -> bucket 2`,
+      check50: 'check50 cs50/problems/2024/x/speller',
+      submit50: 'submit50 cs50/problems/2024/x/speller',
+    },
+    simpleVideoExplanations: [
+      {
+        chapterTitle: 'Inicio del vídeo · Listas Enlazadas (Linked Lists)',
+        analogyTitle: '🗺️ Analogía de una gymkana o búsqueda del tesoro con pistas',
+        paragraphs: [
+          'En un array normal todas las taquillas tienen que estar pegadas en la misma pared. Una Lista Enlazada, en cambio, funciona como una búsqueda del tesoro: el primer cofre guarda un dato y una nota con la dirección exacta de en qué rincón de la casa está escondido el segundo cofre.',
+          'Gracias a eso, puedes añadir nuevos cofres en cualquier momento sin tener que mudar toda la fila de sitio.',
+        ],
+      },
+      {
+        chapterTitle: 'Mitad del vídeo · Tablas Hash y Colisiones',
+        analogyTitle: '🗂️ Analogía del archivador de una clínica con 26 cajones (A–Z)',
+        paragraphs: [
+          'Si tienes un millón de fichas de pacientes y quieres encontrar a "Beatriz" sin revisar todas las fichas, usas un archivador con 26 cajones de la A a la Z. La "función hash" es simplemente mirar la primera letra ("B") y saber al instante que debes abrir el cajón número 1.',
+          'Cuando dos personas empiezan por la misma letra (como "Ana" y "Alberto"), ambas fichas van al mismo cajón A: a eso lo llamamos una "colisión", y lo resolvemos enganchando las fichas de ese cajón una detrás de otra.',
+        ],
+      },
+    ],
   },
   {
     id: 'module-6',
     weekLabel: 'Clase 6',
     title: 'Python: De C a Alto Nivel, Librerías y Manejo de Excepciones',
-    subtitle: 'Sintaxis expresiva, dicts, lists, comprenhensions, try/except y módulos',
+    subtitle: 'Escribir menos código y más legible en Python para analizar cadenas de ADN',
     videoUrl: 'https://www.youtube.com/watch?v=N3zVFYQu3bU',
     youtubeId: 'N3zVFYQu3bU',
     language: 'python',
     verifiedTopics:
-      'Traducción conceptual de C a Python, tipado dinámico, listas, tuplas, diccionarios (hash tables nativas), manejo de excepciones (try/except), lectura de archivos CSV y uso de librerías estándar.',
+      'Traducción de lo aprendido en C a Python (sin puntos y comas ni gestión manual de memoria), listas, diccionarios y búsqueda de patrones repetidos en texto (análisis de ADN).',
     realWorldUseCase:
-      'Python es la lengua franca de la automatización, ciencia de datos e ingeniería de IA. Aquí conectas tu base sólida de lógica y memoria con productividad real.',
+      'Analizar textos largos, archivos de datos o secuencias biológicas con pocas líneas de código claro.',
     feynmanPrompt:
-      'Si Python gestiona la memoria y los tipos automáticamente por ti, ¿por qué fue tan valioso que aprendieras primero C, punteros y estructuras de datos?',
-    starterChallengeTitle: 'Procesador de Datos y Frecuencia con Diccionarios',
-    starterCode: `# Clase 6 — Python Aplicado
-# Cuenta la frecuencia de palabras clave en un registro de soporte sin usar librerías externas aún
+      '¿Cómo buscarías cuántas veces aparece la palabra `"AGATC"` dentro de una frase larga usando una ventana deslizante?',
+    starterChallengeTitle: 'Problem Set 6: DNA (Conteo de Repeticiones STR en Secuencias)',
+    starterCode: `# CS50 Clase 6 — DNA Sequence Analyzer
+# Cuenta cuántas veces aparece un marcador genético (ej. "AGATC") en una secuencia de ADN.
 
-logs = ["error_auth", "ok", "timeout", "error_auth", "ok", "error_db", "error_auth"]
-counts = {}
+sequence = "AAGATCGAGATCGAGATCGT"
+subsequence = "AGATC"
 
-# TODO: Recorre logs y actualiza el diccionario counts para cada evento
-print("Frecuencias calculadas:", counts)
+def count_occurrences(seq, sub):
+    # TODO: Cuenta y devuelve cuántas veces aparece 'sub' dentro de 'seq'
+    return 0
+
+print("STR:", subsequence)
+print("Repeticiones encontradas:", count_occurrences(sequence, subsequence))
 `,
+    allowedConceptsConstraint:
+      'SOLO puedes hablar de los conceptos de la Clase 6: sintaxis de Python frente a C, cadenas de texto (strings), listas, diccionarios y conteo de subcadenas en el ejercicio de ADN.',
+    officialExercise: {
+      title: 'Problem Set 6: DNA Profiling in Python',
+      notesUrl: 'https://cs50.harvard.edu/x/notes/6/',
+      psetUrl: 'https://cs50.harvard.edu/x/psets/6/dna/',
+      goal: 'Analizar una cadena de ADN (`sequence`) en Python para identificar cuántas veces aparece un marcador genético corto (`subsequence = "AGATC"`).',
+      specs: [
+        'Completa la función `count_occurrences(seq, sub)` utilizando el método `.count(sub)` de Python o recorriendo la cadena con una ventana del tamaño `len(sub)`.',
+        'Devuelve el número entero total de apariciones e imprímelo por terminal.',
+      ],
+      usageExample: `$ python3 dna.py
+STR: AGATC
+Repeticiones encontradas: 3`,
+      check50: 'check50 cs50/problems/2024/x/dna',
+      submit50: 'submit50 cs50/problems/2024/x/dna',
+    },
+    simpleVideoExplanations: [
+      {
+        chapterTitle: 'Inicio del vídeo · Pasar de C a Python',
+        analogyTitle: '🚗 Analogía de pasar de un coche con marchas manuales a uno automático',
+        paragraphs: [
+          'Aprender C primero fue como aprender a conducir con cambio manual: entendiste cómo funcionan el embrague y las revoluciones del motor (la memoria y los tipos de datos). Python es un coche automático moderno: sigue teniendo un motor por debajo, pero cambia de marcha y gestiona la memoria por ti.',
+          'Lo que en C te llevaba diez líneas con llaves `{}` y puntos y comas `;`, en Python se escribe casi como una frase normal en inglés.',
+        ],
+      },
+      {
+        chapterTitle: 'Segunda mitad del vídeo · Buscar patrones en el ADN',
+        analogyTitle: '🔍 Analogía de deslizar una lupa de 5 letras sobre una tira de papel',
+        paragraphs: [
+          'El ADN humano se representa con cuatro letras (`A`, `C`, `G`, `T`). Para identificar a una persona en un laboratorio forense, los científicos cuentan cuántas veces se repite un trocito concreto, como `"AGATC"`.',
+          'En Python puedes deslizar una ventana de 5 letras a lo largo de toda la tira de texto o usar sus herramientas de cadenas para contar al instante cuántas veces aparece ese patrón.',
+        ],
+      },
+    ],
   },
   {
     id: 'module-7',
     weekLabel: 'Clase 7',
     title: 'SQL, Bases de Datos Relacionales y Prevención de SQL Injection',
-    subtitle: 'Tablas, Primary/Foreign Keys, JOINs, índices y consultas seguras',
+    subtitle: 'Hojas de cálculo con superpoderes y preguntas en lenguaje SQL',
     videoUrl: 'https://www.youtube.com/watch?v=VnfMRaZUSrc',
     youtubeId: 'VnfMRaZUSrc',
     language: 'sql',
     verifiedTopics:
-      'De archivos planos CSV a bases de datos relacionales (SQLite), operaciones CRUD (CREATE, SELECT, INSERT, UPDATE, DELETE), agregaciones (COUNT, AVG, GROUP BY), relaciones (Primary Key, Foreign Key, JOIN), índices B-Tree, condiciones de carrera y SQL Injection.',
+      'Tablas de bases de datos (filas y columnas), consultas SELECT, filtros WHERE, ordenamiento ORDER BY, relaciones entre tablas (JOIN) y seguridad frente a SQL Injection.',
     realWorldUseCase:
-      'Toda aplicación seria de IA o automatización necesita persistir usuarios, historiales, logs y métricas en bases de datos estructuradas y consultarlas sin vulnerabilidades de inyección.',
+      'Guardar y consultar millones de clientes, películas o pedidos al instante pidiendo exactamente los datos que necesitas.',
     feynmanPrompt:
-      'Explica qué es un ataque de SQL Injection y por qué concatenar texto del usuario directamente dentro de una consulta SQL es peligroso.',
-    starterChallengeTitle: 'Consultas Relacionales en el Sandbox SQL',
-    starterCode: `-- Clase 7 — SQL Relacional
--- La base de datos de prueba tiene las tablas:
--- students (id, name, house, grade) y courses (id, title, week)
--- TODO: Escribe una consulta que filtre estudiantes con grade >= 90 ordenados de mayor a menor.
+      '¿Qué diferencia hay entre indicar qué datos quieres (`SELECT ... WHERE`) en SQL frente a programar un bucle manual en C?',
+    starterChallengeTitle: 'Problem Set 7: Movies & Fiftyville (Consultas Relacionales SQL)',
+    starterCode: `-- CS50 Clase 7 — Consultas SQL sobre SQLite
+-- Tablas disponibles en memoria:
+-- students (id, name, house, grade)
+-- courses (id, title, week)
+-- TODO: Selecciona name, house y grade de los estudiantes con grade >= 90
+-- ordenados por grade de forma descendente (ORDER BY grade DESC).
 
 SELECT name, house, grade FROM students;
 `,
+    allowedConceptsConstraint:
+      'SOLO puedes hablar de los conceptos de la Clase 7: tablas SQL, SELECT, FROM, WHERE, ORDER BY, COUNT, JOIN e inyección SQL.',
+    officialExercise: {
+      title: 'Problem Set 7: SQL Queries (Movies & Fiftyville)',
+      notesUrl: 'https://cs50.harvard.edu/x/notes/7/',
+      psetUrl: 'https://cs50.harvard.edu/x/psets/7/movies/',
+      goal: 'Escribir una consulta en SQL (`SELECT`, `WHERE`, `ORDER BY`) sobre la base de datos SQLite para filtrar los alumnos con nota mayor o igual a 90 y ordenarlos de mayor a menor.',
+      specs: [
+        'Consulta la tabla `students (id, name, house, grade)`.',
+        'Añade la cláusula `WHERE grade >= 90` para filtrar únicamente los alumnos sobresalientes.',
+        'Añade `ORDER BY grade DESC` al final de la consulta antes del punto y coma.',
+      ],
+      usageExample: `name | house | grade
+------------------------
+Hermione | Gryffindor | 100
+Luna | Ravenclaw | 96
+Harry | Gryffindor | 92`,
+      check50: 'check50 cs50/problems/2024/x/movies',
+      submit50: 'submit50 cs50/problems/2024/x/movies',
+    },
+    simpleVideoExplanations: [
+      {
+        chapterTitle: 'Inicio del vídeo · ¿Qué es SQL y una Base de Datos Relacional?',
+        analogyTitle: '📋 Analogía de pedirle un plato al camarero en vez de entrar a cocinarlo',
+        paragraphs: [
+          'En C o Python tú eres el cocinero: tienes que escribir el bucle paso a paso para abrir el archivo y mirar fila por fila. En SQL tú eres el cliente en la mesa: simplemente le dices al camarero "tráeme el nombre y la nota de los alumnos que tengan más de un 90, ordenados de mayor a menor".',
+          'El motor de la base de datos decide por sí solo la forma más rápida de buscar en las tablas y te entrega la bandeja con el resultado.',
+        ],
+      },
+    ],
   },
   {
     id: 'module-8',
     weekLabel: 'Clase 8',
     title: 'HTML, CSS, JavaScript y el Modelo Cliente-Servidor (HTTP)',
-    subtitle: 'TCP/IP, DNS, HTTP status codes, DOM y eventos asíncronos en el navegador',
+    subtitle: 'El esqueleto, la pintura y los músculos de una página web interactiva',
     videoUrl: 'https://www.youtube.com/watch?v=3Ph5G_sfrFM',
     youtubeId: '3Ph5G_sfrFM',
     language: 'javascript',
     verifiedTopics:
-      'Cómo funciona Internet (routers, TCP/IP, DNS, HTTP GET/POST, códigos 200/404/500), estructura semántica HTML, diseño en CSS y manipulación dinámica del DOM con JavaScript y eventos.',
+      'Cómo viajan los mensajes por Internet (HTTP), estructura de una página (HTML), diseño visual (CSS) y lógica interactiva en el navegador con JavaScript.',
     realWorldUseCase:
-      'Para ofrecer tus herramientas de IA a usuarios reales o clientes, debes comprender cómo el navegador envía peticiones HTTP a un servidor y actualiza la interfaz.',
+      'Comprobar que los datos que un usuario escribe en un formulario web sean limpios y correctos antes de enviarlos.',
     feynmanPrompt:
-      'Describe qué ocurre exactamente desde que escribes una dirección web en tu navegador hasta que ves la página en pantalla (DNS, petición HTTP, código de estado y renderizado DOM).',
-    starterChallengeTitle: 'Transformación de Payloads JSON en JavaScript',
-    starterCode: `// Clase 8 — JavaScript y Manipulación de Datos
-// Simula la validación de un formulario antes de enviarlo por HTTP POST
-
-const payload = {
-  username: "  raudel_cs50  ",
+      'Si una página web fuera una casa, ¿qué parte sería el HTML, qué parte el CSS y qué parte el JavaScript?',
+    starterChallengeTitle: 'Problem Set 8: Trivia & Validación de Payloads en JavaScript',
+    starterCode: `// CS50 Clase 8 — JavaScript & Validación Cliente-Servidor
+const submission = {
+  username: "  harvard_cs50  ",
+  answer: "binary search",
   score: "95"
 };
 
-// TODO: Limpia los espacios de username, convierte score a número entero y valida que esté entre 0 y 100
-console.log("Payload inicial:", payload);
+// TODO:
+// 1. Limpia los espacios de submission.username con .trim()
+// 2. Convierte submission.score a entero con Number(submission.score)
+// 3. Verifica si answer === "binary search" e imprime el objeto validado
+
+console.log("Submission:", submission);
 `,
+    allowedConceptsConstraint:
+      'SOLO puedes hablar de los conceptos de la Clase 8: Internet/HTTP, HTML, CSS y JavaScript básico (objetos, strings, trim, Number y condicionales).',
+    officialExercise: {
+      title: 'Problem Set 8: Trivia & Client-Side Validation',
+      notesUrl: 'https://cs50.harvard.edu/x/notes/8/',
+      psetUrl: 'https://cs50.harvard.edu/x/psets/8/trivia/',
+      goal: 'Sanitizar y validar en JavaScript los datos de respuesta de un formulario (`username`, `answer`, `score`).',
+      specs: [
+        'Elimina los espacios sobrantes de `submission.username` usando `.trim()`.',
+        'Convierte `submission.score` de texto (`"95"`) a número (`95`) usando `Number(submission.score)`.',
+        'Comprueba con `if` si `submission.answer === "binary search"` e imprime `"Correcto!"` junto con el objeto limpio.',
+      ],
+      usageExample: `$ node main.mjs
+Correcto!
+{ username: 'harvard_cs50', answer: 'binary search', score: 95 }`,
+      check50: 'check50 cs50/problems/2024/x/trivia',
+      submit50: 'submit50 cs50/problems/2024/x/trivia',
+    },
+    simpleVideoExplanations: [
+      {
+        chapterTitle: 'Mitad del vídeo · HTML, CSS y JavaScript explicados sin tecnicismos',
+        analogyTitle: '🏠 Analogía de los ladrillos, la pintura y la electricidad de una casa',
+        paragraphs: [
+          'Toda página web se construye con tres piezas: HTML son las paredes y puertas (dice dónde hay un título o un botón); CSS es la pintura y la decoración (dice de qué color y tamaño se ve cada botón).',
+          'JavaScript es la instalación eléctrica y los motores: hace que cuando pulses un interruptor (un botón en la pantalla), ocurra una acción inmediata como comprobar si acertaste una pregunta del Trivia.',
+        ],
+      },
+    ],
   },
   {
     id: 'module-9',
     weekLabel: 'Clase 9',
     title: 'Flask, Backend, APIs, Formularios y Sesiones',
-    subtitle: 'Arquitectura MVC, rutas dinámicas, validación en servidor, JSON y cookies',
+    subtitle: 'El recepcionista de seguridad en el servidor que valida cada operación',
     videoUrl: 'https://www.youtube.com/watch?v=i_GmZgveqpw',
     youtubeId: 'i_GmZgveqpw',
     language: 'python',
     verifiedTopics:
-      'Del contenido estático al backend dinámico con Python y Flask, rutas (@app.route), parámetros GET vs POST, validación en el servidor (nunca confiar solo en el cliente), sesiones/cookies y creación de endpoints que devuelven JSON.',
+      'Aplicaciones web dinámicas con Python y Flask, rutas en el servidor, sesiones de usuario y por qué siempre hay que validar el dinero y los datos en el servidor.',
     realWorldUseCase:
-      'El backend es donde proteges tus claves de API (variables de entorno), conectas con la base de datos y orquestas llamadas a modelos de IA de forma segura.',
+      'Evitar que un usuario compre acciones sin saldo o envíe cantidades negativas modificando la página desde su navegador.',
     feynmanPrompt:
-      '¿Por qué nunca debes validar los datos de un usuario únicamente en el navegador (JavaScript) ni guardar claves privadas de API en el código frontend?',
-    starterChallengeTitle: 'Validador de Endpoint Backend y Sanitización',
-    starterCode: `# Clase 9 — Lógica de Servidor y Validación de Peticiones
-def validate_api_request(request_body):
-    # TODO: Comprueba que request_body sea un dict, contenga 'prompt' no vacío
-    # y que no supere los 500 caracteres. Devuelve (es_valido, mensaje).
-    return False, "Pendiente de implementar"
+      '¿Por qué un banco jamás comprueba si tienes saldo únicamente en la pantalla de tu móvil, sino dentro de su propio servidor central?',
+    starterChallengeTitle: 'Problem Set 9: C$50 Finance (Validación de Transacciones en Servidor)',
+    starterCode: `# CS50 Clase 9 — C$50 Finance Backend Validator
+# Valida una orden de compra de acciones en el servidor antes de tocar la base de datos.
 
-test_req = {"prompt": "Explica qué es una API REST"}
-print(validate_api_request(test_req))
+user_cash = 10000.00
+stock_price = 185.50
+
+def execute_buy_order(symbol, shares, cash, price):
+    # TODO:
+    # 1. Verifica que 'symbol' no esté vacío y que 'shares' sea un int > 0
+    # 2. Calcula total_cost = shares * price
+    # 3. Si total_cost > cash, devuelve {"ok": False, "error": "Fondos insuficientes"}
+    # 4. Si es válido, devuelve {"ok": True, "total_cost": total_cost, "remaining_cash": cash - total_cost}
+    return {"ok": False, "error": "Pendiente de implementar"}
+
+print(execute_buy_order("AAPL", 10, user_cash, stock_price))
 `,
+    allowedConceptsConstraint:
+      'SOLO puedes hablar de los conceptos de la Clase 9: cliente vs servidor (backend con Python/Flask), validación de compras en C$50 Finance, diccionarios y condicionales.',
+    officialExercise: {
+      title: 'Problem Set 9: C$50 Finance (Server-Side Transaction Validator)',
+      notesUrl: 'https://cs50.harvard.edu/x/notes/9/',
+      psetUrl: 'https://cs50.harvard.edu/x/psets/9/finance/',
+      goal: 'Construir la lógica de validación en servidor del proyecto C$50 Finance para verificar compras de acciones (`symbol`, `shares`, `user_cash`, `stock_price`) e impedir saldos negativos.',
+      specs: [
+        'Comprueba en `execute_buy_order` que `symbol` no esté vacío y que `shares > 0`.',
+        'Calcula el coste total: `total_cost = shares * price`.',
+        'Si `total_cost > cash`, devuelve `{"ok": False, "error": "Fondos insuficientes"}`.',
+        'En caso contrario, devuelve `{"ok": True, "total_cost": total_cost, "remaining_cash": round(cash - total_cost, 2)}`.',
+      ],
+      usageExample: `$ python3 finance.py
+{'ok': True, 'total_cost': 1855.0, 'remaining_cash': 8145.0}`,
+      check50: 'check50 cs50/problems/2024/x/finance',
+      submit50: 'submit50 cs50/problems/2024/x/finance',
+    },
+    simpleVideoExplanations: [
+      {
+        chapterTitle: 'Mitad del vídeo · Por qué el Servidor (Backend) nunca confía a ciegas',
+        analogyTitle: '🏦 Analogía del cajero del banco que comprueba tu saldo en la caja fuerte',
+        paragraphs: [
+          'Cualquier persona puede cambiar lo que se muestra en su propio navegador web igual que alguien puede escribir a bolígrafo "Tengo 1.000.000 €" en un recibo de papel.',
+          'El código del servidor (Backend en Python/Flask) es el empleado dentro de la cámara acorazada del banco: antes de aprobar la compra de acciones en C$50 Finance, comprueba que el número de acciones sea positivo y que tu saldo real alcance para pagar.',
+        ],
+      },
+    ],
   },
   {
     id: 'module-10',
-    weekLabel: 'Clase Especial IA',
-    title: 'Fundamentos de IA, Modelos de Lenguaje, APIs y Límites',
-    subtitle: 'Árboles de decisión, Minimax, Machine Learning, LLMs, Embeddings y Prompting',
+    weekLabel: 'Clase 10',
+    title: 'Inteligencia Artificial, Modelos de Lenguaje y Proyecto Final',
+    subtitle: 'Cómo funcionan los modelos de IA y cómo verificar sus respuestas en tus proyectos',
     videoUrl: 'https://www.youtube.com/watch?v=MTSE0ZOpyDc',
     youtubeId: 'MTSE0ZOpyDc',
     language: 'python',
     verifiedTopics:
-      'Búsqueda y juegos (Minimax), aprendizaje automático supervisado y por refuerzo, redes neuronales, Transformers, predicción estadística de tokens en Large Language Models (LLMs), embeddings vectoriales, alucinaciones y diferencia entre entrenar un modelo vs consumir una API de IA.',
+      'Árboles de decisión en juegos, cómo predice la siguiente palabra un modelo de lenguaje (LLM), por qué las IAs pueden inventar datos y cómo validar sus respuestas JSON con código Python.',
     realWorldUseCase:
-      'Diferenciar cuándo un problema requiere una regla determinista en Python/SQL y cuándo aporta valor un modelo generativo, controlando alucinaciones, latencia y coste por token.',
+      'Conectar un modelo de IA a tu aplicación verificando siempre con Python que la respuesta tenga el formato y la confianza requeridos.',
     feynmanPrompt:
-      'Explica claramente cuál es la diferencia entre entrenar un modelo de IA desde cero y consumir un modelo mediante una API en tu aplicación, y por qué un LLM puede "alucinar" datos falsos con total seguridad.',
-    starterChallengeTitle: 'Calculadora de Costes de Tokens y Validador de Esquema',
-    starterCode: `# Clase Especial IA — Control de Tokens y Validación de Salida Estructurada
-# Un ingeniero de IA no confía ciegamente en la respuesta del modelo: la valida.
-
-raw_llm_output = '{"category": "billing", "confidence": 0.92}'
-
-# TODO: Parsea el JSON con json.loads, verifica que existan las claves requeridas
-# y que confidence sea un float entre 0.0 y 1.0.
+      '¿Por qué un buen programador valida con `try / except` la respuesta de una IA antes de guardarla en su base de datos?',
+    starterChallengeTitle: 'Problem Set 10: Validador de Respuesta Estructurada de LLM & Capstone',
+    starterCode: `# CS50 Clase 10 — Validación de Salidas Estructuradas de IA (JSON Schema)
 import json
-print("Salida cruda del modelo:", raw_llm_output)
+
+raw_llm_output = '{"intent": "schedule_review", "confidence": 0.94, "topic": "Pointers"}'
+
+def validate_ai_response(raw_json):
+    # TODO:
+    # 1. Parsea raw_json usando json.loads() dentro de un bloque try/except
+    # 2. Verifica que contenga las claves "intent", "confidence" y "topic"
+    # 3. Comprueba que 0.0 <= data["confidence"] <= 1.0
+    # 4. Devuelve (True, data) si es válido o (False, mensaje_error)
+    return False, "Pendiente de validar"
+
+is_valid, result = validate_ai_response(raw_llm_output)
+print("Valid:", is_valid)
+print("Result:", result)
 `,
-    isAiExtension: true,
-  },
-  {
-    id: 'module-11',
-    weekLabel: 'Clase 10 + Proyectos IA',
-    title: 'Arquitectura Práctica: Automatizaciones, Integración de APIs y Proyecto Final',
-    subtitle: 'Orquestación Python + SQL + APIs + IA, manejo de errores, retries y despliegue',
-    videoUrl: 'https://www.youtube.com/watch?v=AUnI1XwWj-g',
-    youtubeId: 'AUnI1XwWj-g',
-    language: 'python',
-    verifiedTopics:
-      'Síntesis de CS50x (C, Python, SQL, Web) y ampliación formativa de ingeniería de IA: diseño de pipelines de automatización, variables de entorno (.env), reintentos con exponential backoff, structured outputs, function calling y arquitectura del proyecto final.',
-    realWorldUseCase:
-      'Construir tus propios sistemas completos: desde un clasificador y automatizador de tareas conectado a base de datos hasta un agente con herramientas verificadas.',
-    feynmanPrompt:
-      'Antes de escribir la primera línea de código de un proyecto propio con IA, ¿qué decisiones de arquitectura (datos, flujo de errores, seguridad de claves y validación) debes definir en papel?',
-    starterChallengeTitle: 'Pipeline de Automatización con Retry y Persistencia',
-    starterCode: `# Clase 10 y Proyectos Guiados de IA
-# Diseña la estructura de un pipeline que procesa entradas, maneja errores y registra resultados
-
-def process_automation_item(item):
-    # TODO: Implementa validación de entrada, transformación y estructura de respuesta auditable
-    return {"status": "pending", "item": item}
-
-items = [{"id": 1, "Task": "Resumen diario"}, {"id": 2, "Task": ""}]
-for it in items:
-    print(process_automation_item(it))
-`,
-    isAiExtension: true,
-  },
-];
-
-export interface GuidedAiProject {
-  id: string;
-  phase: string;
-  title: string;
-  prerequisiteModules: string[];
-  architectureSummary: string;
-  technicalDecisions: string[];
-  socraticMilestones: string[];
-}
-
-export const GUIDED_AI_PROJECTS: GuidedAiProject[] = [
-  {
-    id: 'proj-1',
-    phase: 'Proyecto Guiado 1 · Nivel Intermedio (Tras Clases 0–7)',
-    title: 'CLI de Automatización y Auditoría de Datos con Python + SQLite',
-    prerequisiteModules: ['module-0', 'module-6', 'module-7'],
-    architectureSummary:
-      'Script modular en Python que ingiere archivos CSV/JSON, limpia anomalías, almacena registros normalizados en SQLite mediante consultas parametrizadas y genera reportes estadísticos.',
-    technicalDecisions: [
-      '¿Qué esquema de tablas evita duplicidad de registros?',
-      '¿Cómo manejar filas corruptas sin detener todo el proceso por lotes?',
-      '¿Cómo garantizar cero riesgo de SQL Injection con placeholders (?)?',
-    ],
-    socraticMilestones: [
-      'Hito 1: Definir el esquema CREATE TABLE y justificar cada tipo de dato.',
-      'Hito 2: Implementar el parser de archivos con bloques try/except específicos.',
-      'Hito 3: Escribir las consultas de agregación y verificar casos límite (archivos vacíos).',
-    ],
-  },
-  {
-    id: 'proj-2',
-    phase: 'Proyecto Guiado 2 · Nivel Avanzado (Tras Clases 8–10)',
-    title: 'Microservicio Backend con Salidas Estructuradas de IA y Caché SQL',
-    prerequisiteModules: ['module-6', 'module-7', 'module-9', 'module-10'],
-    architectureSummary:
-      'API HTTP que recibe textos o tickets no estructurados, verifica primero en una base de datos SQL si ya fueron procesados (ahorro de costes y latencia), y si no, consulta un LLM exigiendo un JSON Schema estricto.',
-    technicalDecisions: [
-      '¿Cómo proteger la API Key usando variables de entorno en el servidor?',
-      '¿Qué ocurre si la API externa devuelve un error 429 (Rate Limit) o 500?',
-      '¿Cómo calcular un hash SHA-256 del prompt para usarlo como clave de caché en SQL?',
-    ],
-    socraticMilestones: [
-      'Hito 1: Construir el endpoint HTTP y validar el payload de entrada.',
-      'Hito 2: Implementar la capa de caché en base de datos y medir el ahorro de llamadas.',
-      'Hito 3: Integrar la validación del esquema JSON devuelto por el modelo y manejar fallos.',
-    ],
-  },
-  {
-    id: 'proj-3',
-    phase: 'Proyecto Guiado 3 · Capstone Final (Dominio Integral)',
-    title: 'Agente de Automatización con Function Calling y Flujos Verificados',
-    prerequisiteModules: ['module-5', 'module-9', 'module-10', 'module-11'],
-    architectureSummary:
-      'Sistema completo donde un modelo de lenguaje analiza una solicitud del usuario, decide qué función local invocar (consultar SQL, programar evento o calcular métricas), ejecuta la acción de forma controlada y registra una traza auditable.',
-    technicalDecisions: [
-      '¿Qué funciones debe poder ejecutar el modelo de forma autónoma y cuáles exigen confirmación humana?',
-      '¿Cómo evitar bucles infinitos de llamadas a herramientas (max_iterations)?',
-      '¿Cómo evaluar la precisión del sistema con una batería de 10 casos de prueba?',
-    ],
-    socraticMilestones: [
-      'Hito 1: Diseñar las declaraciones de funciones (Function Declarations) con tipos estrictos.',
-      'Hito 2: Programar el despachador seguro (dispatcher) en Python/TypeScript.',
-      'Hito 3: Construir el panel de observabilidad de errores, latencia y coste estimado.',
-    ],
-  },
-];
-
-export interface TechStepGuide {
-  number: number;
-  name: string;
-  status: 'active_in_app' | 'ready_with_user_setup';
-  scopeClassification: string;
-  summary: string;
-  steps: string[];
-  codeSnippet: string;
-  whereInApp: string;
-}
-
-export const EIGHT_TECH_GUIDES: TechStepGuide[] = [
-  {
-    number: 1,
-    name: 'Gemini API (@google/genai Server-Side Socratic Tutor)',
-    status: 'active_in_app',
-    scopeClassification: 'Implementado en servidor (server.ts)',
-    summary: 'Integrado en el backend Express (server.ts) con instrucciones de sistema socráticas, historial de conversación y modelos especializados sin exponer la API Key al cliente.',
-    steps: [
-      'Instalar el SDK oficial: npm install @google/genai.',
-      'Inicializar en el servidor: const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY }).',
-      'Configurar systemInstruction con reglas socráticas (explicar en español, código en inglés, prohibido resolver ejercicios, 1 pregunta por turno).',
-      'Enviar el historial de conversación (contents) para mantener el contexto entre turnos.',
-    ],
-    codeSnippet: `const response = await ai.models.generateContent({
-  model: "gemini-3.8-flash",
-  contents: conversationContents,
-  config: {
-    systemInstruction: CS50_SYSTEM_INSTRUCTION,
-  },
-});`,
-    whereInApp: 'Pestaña Tutor Socrático (selector de motor IA), Tutor por Voz en Vivo y Analizador de Vídeo.',
-  },
-  {
-    number: 2,
-    name: 'Structured Outputs (JSON Schema Estricto en Gemini API)',
-    status: 'active_in_app',
-    scopeClassification: 'Implementado en servidor (/api/gemini/tutor)',
-    summary: 'Cada respuesta del tutor socrático devuelve un objeto JSON validado por esquema que separa la respuesta pedagógica de los metadatos de evaluación adaptativa.',
-    steps: [
-      'Importar Type desde @google/genai en el backend (server.ts).',
-      'En config, definir responseMimeType: "application/json" y responseSchema con Type.OBJECT.',
-      'Declarar propiedades tipadas: socraticReply (STRING), singleQuestion (STRING), detectedLevel (INTEGER 1-4), passedCurrentLevel (BOOLEAN), hintGiven (BOOLEAN), errorDetected (BOOLEAN), errorCategory (STRING) y recommendedIntervalDays (INTEGER).',
-      'Parsear response.text con JSON.parse() y actualizar la interfaz y Firestore de forma determinista.',
-    ],
-    codeSnippet: `config: {
-  systemInstruction: CS50_SYSTEM_INSTRUCTION,
-  responseMimeType: "application/json",
-  responseSchema: {
-    type: Type.OBJECT,
-    properties: {
-      socraticReply: { type: Type.STRING },
-      singleQuestion: { type: Type.STRING },
-      detectedLevel: { type: Type.INTEGER },
-      passedCurrentLevel: { type: Type.BOOLEAN },
-      errorDetected: { type: Type.BOOLEAN },
-      errorCategory: { type: Type.STRING },
-      recommendedIntervalDays: { type: Type.INTEGER }
+    allowedConceptsConstraint:
+      'SOLO puedes hablar de los conceptos de la Clase 10: fundamentos de IA explicados en CS50, predicción de palabras, validación de JSON con json.loads y try/except en Python.',
+    officialExercise: {
+      title: 'CS50 Artificial Intelligence & Final Project Validator',
+      notesUrl: 'https://cs50.harvard.edu/x/notes/ai/',
+      psetUrl: 'https://cs50.harvard.edu/x/project/',
+      goal: 'Implementar un validador defensivo en Python (`validate_ai_response`) que parsee la respuesta JSON de un modelo de lenguaje y verifique sus campos obligatorios y rangos numéricos.',
+      specs: [
+        'Usa un bloque `try / except` para convertir `raw_json` en diccionario con `json.loads(raw_json)`.',
+        'Verifica que el diccionario incluya las claves `"intent"`, `"confidence"` y `"topic"`.',
+        'Comprueba que `0.0 <= data["confidence"] <= 1.0` y devuelve `(True, data)`.',
+      ],
+      usageExample: `$ python3 project.py
+Valid: True
+Result: {'intent': 'schedule_review', 'confidence': 0.94, 'topic': 'Pointers'}`,
+      check50: 'check50 cs50/problems/2024/x/project',
+      submit50: 'submit50 cs50/problems/2024/x/project',
     },
-    required: ["socraticReply", "singleQuestion", "detectedLevel", "passedCurrentLevel"]
-  }
-}`,
-    whereInApp: 'Motor principal en /api/gemini/tutor y panel de metadatos estructurados bajo cada mensaje del tutor.',
-  },
-  {
-    number: 3,
-    name: 'Function Calling (Herramientas del Tutor con Gemini API)',
-    status: 'active_in_app',
-    scopeClassification: 'Implementado en servidor + cliente',
-    summary: 'Permite a Gemini invocar funciones de la aplicación cuando detecta que superaste un nivel, cometiste un error recurrente o necesitas una plantilla en el sandbox.',
-    steps: [
-      'Definir objetos FunctionDeclaration (advanceMasteryLevel, recordRecurrentError, scheduleSpacedRepetition, loadSandboxExercise) usando Type.OBJECT.',
-      'Pasar las declaraciones en config: { tools: [{ functionDeclarations: tutorFunctionDeclarations }] }.',
-      'Inspeccionar response.functionCalls en la respuesta del modelo.',
-      'Ejecutar la función local correspondiente (actualizar estado en React y persistir en Cloud Firestore).',
+    simpleVideoExplanations: [
+      {
+        chapterTitle: 'Mitad del vídeo · Cómo piensa un Modelo de Lenguaje (LLM) y por qué validarlo',
+        analogyTitle: '📱 Analogía del texto predictivo de tu móvil multiplicado por mil millones',
+        paragraphs: [
+          'Un modelo de lenguaje no "sabe" verdades absolutas como una calculadora; funciona como el teclado predictivo de tu teléfono cuando escribes "Buenos..." y te sugiere "...días" porque estadísticamente es la palabra más probable tras haber leído millones de textos.',
+          'Como a veces puede equivocarse o desordenar el formato, los ingenieros usan Python como un control de calidad en la puerta: revisan con `json.loads` que la respuesta traiga todas las casillas rellenas antes de darla por buena.',
+        ],
+      },
     ],
-    codeSnippet: `const advanceLevelTool: FunctionDeclaration = {
-  name: "advanceMasteryLevel",
-  description: "Actualiza el nivel (1 a 4) cuando el alumno demuestra comprensión.",
-  parameters: {
-    type: Type.OBJECT,
-    properties: {
-      moduleId: { type: Type.STRING },
-      newLevel: { type: Type.INTEGER },
-      status: { type: Type.STRING }
-    },
-    required: ["moduleId", "newLevel", "status"]
-  }
-};`,
-    whereInApp: 'Modo "Search Grounding + Function Calling" en el Tutor Socrático.',
-  },
-  {
-    number: 4,
-    name: 'Firebase Authentication (Google Sign-In)',
-    status: 'active_in_app',
-    scopeClassification: 'Implementado y provisionado (src/firebase.ts)',
-    summary: 'Autenticación de usuarios mediante Google Sign-In con popup compatible con el entorno iframe de AI Studio.',
-    steps: [
-      'Provisionar el proyecto Firebase y cargar firebase-applet-config.json.',
-      'Inicializar getAuth(app) y configurar GoogleAuthProvider().',
-      'Invocar signInWithPopup(auth, provider) desde el botón de inicio de sesión.',
-      'Escuchar cambios de sesión con onAuthStateChanged para cargar automáticamente el perfil y progreso del alumno.',
-    ],
-    codeSnippet: `const provider = new GoogleAuthProvider();
-const result = await signInWithPopup(auth, provider);
-onAuthStateChanged(auth, (user) => {
-  if (user) ensureUserProfile(user);
-});`,
-    whereInApp: 'Botón "Sign in with Google" en la barra superior.',
-  },
-  {
-    number: 5,
-    name: 'Cloud Firestore (Persistencia de Sesiones, Ejercicios y Errores)',
-    status: 'active_in_app',
-    scopeClassification: 'Implementado con reglas Zero-Trust desplegadas',
-    summary: 'Almacena temas estudiados, conceptos dominados/en proceso, ejercicios completados, errores recurrentes, pistas usadas y el historial de sesión para reanudar en cualquier momento.',
-    steps: [
-      'Modelar las colecciones en firebase-blueprint.json (/users, /topicProgress, /errorRecords, /tutorSessions).',
-      'Escribir y auditar reglas de seguridad estrictas en firestore.rules verificando request.auth.uid y esquemas.',
-      'Suscribirse en tiempo real con onSnapshot(query(collection(db, "topicProgress"), where("ownerId", "==", user.uid))).',
-      'Restaurar automáticamente la última conversación guardada en /tutorSessions al iniciar sesión.',
-    ],
-    codeSnippet: `const q = query(collection(db, "topicProgress"), where("ownerId", "==", user.uid));
-onSnapshot(q, (snapshot) => {
-  // Sincroniza temas dominados, intentos, pistas e intervalos SRS
-});`,
-    whereInApp: 'Pestaña Memoria & SRS y restauración automática al iniciar sesión.',
-  },
-  {
-    number: 6,
-    name: 'Code Execution / Sandboxed Code Runner',
-    status: 'active_in_app',
-    scopeClassification: 'Implementado en servidor (/api/code/run)',
-    summary: 'Entorno de ejecución aislado en el backend para Python 3, C, JavaScript y SQLite con límite de ejecución de 5 segundos.',
-    steps: [
-      'Crear un directorio temporal efímero por petición usando fs.mkdtemp(path.join(os.tmpdir(), "cs50-sandbox-")).',
-      'Ejecutar el código en un proceso hijo aislado con execFile y timeout: 5000ms.',
-      'Capturar stdout, stderr, exitCode y limpiar el directorio temporal en el bloque finally.',
-    ],
-    codeSnippet: `const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "cs50-sandbox-"));
-const result = await execFileAsync("python3", ["-I", filePath], {
-  cwd: tmpDir,
-  timeout: 5000
-});`,
-    whereInApp: 'Pestaña Laboratorio de Código & Depuración Socrática.',
-  },
-  {
-    number: 7,
-    name: 'Google Search Grounding for Gemini',
-    status: 'active_in_app',
-    scopeClassification: 'Implementado en servidor (/api/gemini/tutor)',
-    summary: 'Conecta Gemini con Google Search en tiempo real para verificar documentación técnica oficial y contenidos de CS50 sin inventar enlaces.',
-    steps: [
-      'Añadir { googleSearch: {} } en el arreglo tools de ai.models.generateContent.',
-      'Para usarlo junto con Function Calling en modelos Gemini 3/4, activar toolConfig: { includeServerSideToolInvocations: true }.',
-      'Extraer las citas y URLs verificadas desde response.candidates?.[0]?.groundingMetadata?.groundingChunks.',
-      'Renderizar los enlaces web verificados debajo de la respuesta del tutor.',
-    ],
-    codeSnippet: `const response = await ai.models.generateContent({
-  model: "gemini-3.8-flash",
-  contents: conversationContents,
-  config: {
-    tools: [{ googleSearch: {} }, { functionDeclarations }],
-    toolConfig: { includeServerSideToolInvocations: true }
-  }
-});
-const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;`,
-    whereInApp: 'Modo "Search Grounding + Function Calling" en el Tutor Socrático.',
-  },
-  {
-    number: 8,
-    name: 'GitHub Integration (Guardado de Snippets / Gists y Versionado)',
-    status: 'ready_with_user_setup',
-    scopeClassification: 'Gist API + OAuth Popup implementados · Claves OAuth de usuario opcionales',
-    summary: 'Permite guardar tus fragmentos de código y registro Markdown en un GitHub Gist privado. El versionado Git completo de repositorios multi-rama se plantea como tarea de fase posterior cuando completes los fundamentos.',
-    steps: [
-      'Opción A (Inmediata): Generar un Personal Access Token (con permiso "gist") en GitHub y pegarlo en la pestaña Memoria & SRS para exportar tu código y progreso en 1 clic.',
-      'Opción B (OAuth Popup): Crear una OAuth App en https://github.com/settings/developers.',
-      'Configurar el Authorization callback URL con la URL exacta del contenedor (/auth/github/callback).',
-      'Añadir GITHUB_CLIENT_ID y GITHUB_CLIENT_SECRET en Settings > Secrets. (Tarea futura opcional: commits directos a ramas de repositorios mediante la API REST /repos/{owner}/{repo}/contents).',
-    ],
-    codeSnippet: `// Exportación directa a GitHub Gist (/api/github/export-gist)
-const gistRes = await fetch("https://api.github.com/gists", {
-  method: "POST",
-  headers: {
-    Authorization: \`Bearer \${activeToken}\`,
-    Accept: "application/vnd.github+json"
-  },
-  body: JSON.stringify({
-    description: "CS50 Maestro Tutor — Progreso y Código",
-    public: false,
-    files: { "CS50_PROGRESO.md": { content } }
-  })
-});`,
-    whereInApp: 'Pestaña Memoria & SRS (sección Exportar a GitHub Gist) y pestaña Arquitectura & Paso a Paso.',
+    isAiExtension: true,
   },
 ];
