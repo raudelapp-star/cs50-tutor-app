@@ -15,6 +15,27 @@ export interface OfficialCS50Exercise {
   submit50: string;
 }
 
+export interface MicroExercise {
+  id: string;
+  title: string;
+  duration: string;
+  prompt: string;
+  language: 'c' | 'python' | 'sql' | 'javascript' | 'scratch';
+  starterCode: string;
+  solutionCode: string;
+  solutionExplanation: string;
+}
+
+export interface VideoChapter {
+  id: string;
+  chapterNumber: number;
+  title: string;
+  timeRange: string;
+  startSeconds: number;
+  summary: string;
+  microExercises: MicroExercise[];
+}
+
 export interface CS50Module {
   id: string;
   weekLabel: string;
@@ -31,6 +52,7 @@ export interface CS50Module {
   officialExercise: OfficialCS50Exercise;
   simpleVideoExplanations: SimpleVideoConcept[];
   allowedConceptsConstraint: string;
+  chapters: VideoChapter[];
   isAiExtension?: boolean;
 }
 
@@ -65,6 +87,142 @@ int main(void)
 `,
     allowedConceptsConstraint:
       'SOLO puedes hablar de lo visto en la Clase 0: bombillas/binario, ASCII, colores RGB, el ejemplo de romper la guía telefónica por la mitad y bloques visuales de Scratch (Al hacer clic en bandera verde, Por siempre, Repetir, Si... entonces, Variables de puntos/vidas, Enviar mensaje/broadcast y sprites). PROHIBIDO mencionar código escrito en Python, C, while, for o funciones en texto.',
+    chapters: [
+      {
+        id: 'c0-ch1',
+        chapterNumber: 1,
+        title: 'Sistema Binario, Bits y Bombillas',
+        timeRange: '00:00 - 00:35',
+        startSeconds: 0,
+        summary: 'Cómo los ordenadores representan información únicamente con interruptores de encendido (1) y apagado (0), formando bytes para letras (ASCII) y píxeles (RGB).',
+        microExercises: [
+          {
+            id: 'm0-ex1',
+            title: 'Cálculo de Bits a Decimal (8 Bombillas)',
+            duration: '5 min',
+            prompt: 'En el vídeo David Malan enciende 3 bombillas: la de valor 4, la de valor 2 y la de valor 1 (binario 00000111). Calcula e imprime el valor decimal total usando C.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+int main(void)
+{
+    // Las 3 bombillas activas tienen pesos: 4, 2 y 1
+    int b2 = 4;
+    int b1 = 2;
+    int b0 = 1;
+
+    // TODO: Suma las tres variables y muestra "Valor decimal: %d\\n"
+    int total = 0;
+
+    printf("Valor decimal: %d\\n", total);
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+
+int main(void)
+{
+    int b2 = 4;
+    int b1 = 2;
+    int b0 = 1;
+
+    int total = b2 + b1 + b0;
+
+    printf("Valor decimal: %d\\n", total);
+    return 0;
+}
+`,
+            solutionExplanation: '1. Cada posición binaria representa una potencia de 2: 2^2=4, 2^1=2, 2^0=1.\n2. La suma 4 + 2 + 1 = 7 corresponde al número binario 111.\n3. printf sustituye %d por el valor de la variable total.'
+          }
+        ]
+      },
+      {
+        id: 'c0-ch2',
+        chapterNumber: 2,
+        title: 'Algoritmos y la Guía Telefónica',
+        timeRange: '00:35 - 01:05',
+        startSeconds: 2100,
+        summary: 'David Malan busca un nombre rompiendo una guía telefónica de 1000 páginas a la mitad en cada paso, ilustrando la búsqueda binaria (dividir para vencer).',
+        microExercises: [
+          {
+            id: 'm0-ex2',
+            title: 'Dividir a la Mitad (Divide and Conquer)',
+            duration: '5 min',
+            prompt: 'Simula el primer corte de la guía telefónica: calcula la página del medio entre la página 1 y la página 1000 e imprímela.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+int main(void)
+{
+    int min_page = 1;
+    int max_page = 1000;
+
+    // TODO: Calcula la página media sumando min y max y dividiendo entre 2
+    int middle_page = 0;
+
+    printf("Página central: %d\\n", middle_page);
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+
+int main(void)
+{
+    int min_page = 1;
+    int max_page = 1000;
+
+    int middle_page = (min_page + max_page) / 2;
+
+    printf("Página central: %d\\n", middle_page);
+    return 0;
+}
+`,
+            solutionExplanation: '1. (1 + 1000) / 2 = 500 en división entera de C.\n2. Al abrir la página 500, sabemos inmediatamente si el nombre buscado está en la mitad izquierda o derecha, descartando 500 páginas de un solo golpe.'
+          }
+        ]
+      },
+      {
+        id: 'c0-ch3',
+        chapterNumber: 3,
+        title: 'Lógica Visual en Scratch (LEGO Blocks)',
+        timeRange: '01:05 - Final',
+        startSeconds: 3900,
+        summary: 'Construcción de programas interactivos en Scratch mediante bloques de eventos (amarillo), bucles (naranja), condicionales y variables de estado.',
+        microExercises: [
+          {
+            id: 'm0-ex3',
+            title: 'Planificación de Marcador de Puntos',
+            duration: '5 min',
+            prompt: 'En Scratch usamos una variable llamada "puntos". Simula en código C cómo empieza en 0 y suma 10 puntos al atrapar un objeto.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+int main(void)
+{
+    int puntos = 0;
+
+    // TODO: Suma 10 puntos y muestra el marcador actualizado
+    
+    printf("Puntos: %d\\n", puntos);
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+
+int main(void)
+{
+    int puntos = 0;
+    puntos = puntos + 10;
+
+    printf("Puntos: %d\\n", puntos);
+    return 0;
+}
+`,
+            solutionExplanation: '1. `puntos = puntos + 10;` incrementa el valor actual de la variable en 10 unidades.\n2. Equivale exactamente al bloque de Scratch: "cambiar [puntos] por (10)".'
+          }
+        ]
+      }
+    ],
     officialExercise: {
       title: 'Problem Set 0: Proyecto en Scratch',
       notesUrl: 'https://cs50.harvard.edu/x/notes/0/',
@@ -117,7 +275,7 @@ int main(void)
     youtubeId: 'ev96qUufJYI',
     language: 'c',
     verifiedTopics:
-      'Paso de bloques de Scratch a texto en C, compilador (traductor de código fuente a binario), tipos de datos (int, float, char), condicionales (if/else) y bucles (while, for) para construir la pirámide de Mario.',
+      'Paso de bloques de Scratch a texto en C, compilador (traductor de código fuente a binario con gcc y make), tipos de datos (int, float, char), formato con printf, condicionales (if/else), bucles (while, for), funciones personalizadas y Mario.',
     realWorldUseCase:
       'Escribir instrucciones exactas que un compilador traduce directamente al idioma de la máquina a máxima velocidad.',
     feynmanPrompt:
@@ -141,6 +299,300 @@ int main(void)
 `,
     allowedConceptsConstraint:
       'SOLO puedes usar conceptos de la Clase 0 y Clase 1 (lenguaje C básico: printf, variables int/float/char, if/else, while, for anidados y el compilador). PROHIBIDO mencionar arrays, punteros, Python o SQL.',
+    chapters: [
+      {
+        id: 'c1-ch1',
+        chapterNumber: 1,
+        title: 'Hola Mundo y Compilación (make / gcc)',
+        timeRange: '00:00 - 00:30',
+        startSeconds: 0,
+        summary: 'Introducción al código fuente en C, el compilador como traductor a ceros y unos, la biblioteca estándar <stdio.h>, la función main y printf con saltos de línea \\n.',
+        microExercises: [
+          {
+            id: 'c1-ex1',
+            title: 'Mi Primer Saludo con printf y \\n',
+            duration: '5 min',
+            prompt: 'Escribe un programa en C que imprima exactamente "Hola, mundo desde CS50!" seguido de un salto de línea con \\n.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+int main(void)
+{
+    // TODO: Imprime "Hola, mundo desde CS50!\n" usando printf
+    
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+
+int main(void)
+{
+    printf("Hola, mundo desde CS50!\n");
+    return 0;
+}
+`,
+            solutionExplanation: '1. `#include <stdio.h>`: Importa la biblioteca de entrada y salida estándar obligatoria para usar printf.\n2. `int main(void)`: Punto de inicio del programa.\n3. `printf("Hola, mundo desde CS50!\\n");`: Imprime el mensaje y mueve el cursor a la siguiente línea.\n4. `return 0;`: Señala terminación exitosa sin errores.'
+          }
+        ]
+      },
+      {
+        id: 'c1-ch2',
+        chapterNumber: 2,
+        title: 'Variables y Entrada de Usuario (get_string / %s)',
+        timeRange: '00:31 - 00:55',
+        startSeconds: 1860,
+        summary: 'Cómo almacenar valores en variables con tipo definido (char, int, float) y formatear salidas dinámicas mediante especificadores de formato como %s y %d.',
+        microExercises: [
+          {
+            id: 'c1-ex2',
+            title: 'Saludo Personalizado con Formato %s (greet.c)',
+            duration: '5 min',
+            prompt: 'En greet.c, define una cadena con tu nombre e imprímela con printf usando el especificador %s para mostrar "Hola, %s!\\n".',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+int main(void)
+{
+    char name[] = "David";
+
+    // TODO: Usa printf con %s para imprimir "Hola, %s!\n" pasando la variable name
+    
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+
+int main(void)
+{
+    char name[] = "David";
+    printf("Hola, %s!\n", name);
+    return 0;
+}
+`,
+            solutionExplanation: '1. `char name[] = "David";`: Declara un array de caracteres con el texto "David".\n2. En `printf("Hola, %s!\\n", name);`, `%s` es sustituido por el contenido de la variable name.\n3. Es el equivalente en C puro al bloque de Scratch "decir (unir [Hola, ] [David])".'
+          }
+        ]
+      },
+      {
+        id: 'c1-ch3',
+        chapterNumber: 3,
+        title: 'Condicionales (if, else if, else) y Comparaciones',
+        timeRange: '00:55 - 01:22',
+        startSeconds: 3300,
+        summary: 'Toma de decisiones lógicas en C evaluando expresiones booleanas con operadores de comparación (<, >, ==, !=) sin comprobaciones redundantes.',
+        microExercises: [
+          {
+            id: 'c1-ex3',
+            title: 'Comparador de Números (compare.c)',
+            duration: '5 min',
+            prompt: 'Dadas dos variables enteras x e y, utiliza if, else if y else para determinar si x < y, x > y o si son iguales.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+int main(void)
+{
+    int x = 5;
+    int y = 10;
+
+    // TODO: Compara x e y con if / else if / else
+    // Imprime "x es menor que y\n", "x es mayor que y\n" o "x es igual a y\n"
+
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+
+int main(void)
+{
+    int x = 5;
+    int y = 10;
+
+    if (x < y)
+    {
+        printf("x es menor que y\n");
+    }
+    else if (x > y)
+    {
+        printf("x es mayor que y\n");
+    }
+    else
+    {
+        printf("x es igual a y\n");
+    }
+
+    return 0;
+}
+`,
+            solutionExplanation: '1. `if (x < y)` verifica el primer caso.\n2. `else if (x > y)` se evalúa solo si el primero fue falso.\n3. El bloque `else` final captura el caso restante (son iguales) sin necesidad de una comparación extra ineficiente.'
+          }
+        ]
+      },
+      {
+        id: 'c1-ch4',
+        chapterNumber: 4,
+        title: 'Bucles (while y for) con cat.c',
+        timeRange: '01:22 - 01:44',
+        startSeconds: 4920,
+        summary: 'Repetición controlada de instrucciones sin duplicar código. Paso del bucle while manual con contador al bucle for idiomático de C.',
+        microExercises: [
+          {
+            id: 'c1-ex4a',
+            title: 'Contador con Bucle while (cat.c)',
+            duration: '5 min',
+            prompt: 'Utiliza una variable contador `int i = 0` y un bucle `while (i < 3)` para imprimir "meow\\n" 3 veces. ¡Recuerda incrementar i en cada vuelta!',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+int main(void)
+{
+    int i = 0;
+
+    // TODO: Escribe el bucle while para maullar 3 veces
+    // Incrementa i con i++ dentro del bucle
+
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+
+int main(void)
+{
+    int i = 0;
+    while (i < 3)
+    {
+        printf("meow\n");
+        i++;
+    }
+    return 0;
+}
+`,
+            solutionExplanation: '1. `int i = 0;`: El contador arranca en 0 (indexación base 0 estándar).\n2. `while (i < 3)`: Se ejecuta mientras i sea 0, 1 y 2 (un total de 3 veces).\n3. `i++;`: Incrementa i en 1 para que el bucle avance hacia su condición de parada.'
+          },
+          {
+            id: 'c1-ex4b',
+            title: 'Refactorización Idiomática con Bucle for',
+            duration: '5 min',
+            prompt: 'Reescribe el programa de los maullidos compactando inicialización, condición e incremento en la cabecera con `for (int i = 0; i < 3; i++)`.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+int main(void)
+{
+    // TODO: Escribe un bucle for que imprima "meow\n" 3 veces
+
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+
+int main(void)
+{
+    for (int i = 0; i < 3; i++)
+    {
+        printf("meow\n");
+    }
+    return 0;
+}
+`,
+            solutionExplanation: '1. `for (int i = 0; i < 3; i++)` unifica el ciclo en una sola línea legible.\n2. La variable i queda acotada exclusivamente al cuerpo del bucle, protegiendo el resto de tu código.'
+          }
+        ]
+      },
+      {
+        id: 'c1-ch5',
+        chapterNumber: 5,
+        title: 'Crear tus Propias Funciones (void meow(int n))',
+        timeRange: '01:44 - 02:02',
+        startSeconds: 6240,
+        summary: 'Modularización y abstracción en C: declaración de prototipos arriba de main, implementación de funciones con parámetros y paso por valor.',
+        microExercises: [
+          {
+            id: 'c1-ex5',
+            title: 'Definir e Invocar una Función meow(int n)',
+            duration: '5 min',
+            prompt: 'Declara el prototipo `void meow(int n);` arriba de `main`, define la función abajo con un bucle `for`, e invócala desde `main` con `meow(3)`.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+// TODO 1: Declarar el prototipo de meow(int n) aquí
+
+int main(void)
+{
+    // TODO 2: Llama a meow(3) para maullar 3 veces
+    
+    return 0;
+}
+
+// TODO 3: Implementa void meow(int n) abajo
+`,
+            solutionCode: `#include <stdio.h>
+
+void meow(int n);
+
+int main(void)
+{
+    meow(3);
+    return 0;
+}
+
+void meow(int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        printf("meow\n");
+    }
+}
+`,
+            solutionExplanation: '1. `void meow(int n);`: Prototipo que avisa al compilador de la existencia de la función antes de main.\n2. `meow(3);`: Llamada limpia desde main que pasa el argumento 3.\n3. La definición abajo recibe el valor en el parámetro n y ejecuta el bucle de 0 a n.'
+          }
+        ]
+      },
+      {
+        id: 'c1-ch6',
+        chapterNumber: 6,
+        title: 'Desbordamiento Numérico y Reto Integrador (Mario)',
+        timeRange: '02:02 - Final',
+        startSeconds: 7320,
+        summary: 'Limitaciones de memoria física (integer overflow y precisión de punto flotante) y preparación mental para los bucles anidados del Problem Set de Mario.',
+        microExercises: [
+          {
+            id: 'c1-ex6',
+            title: 'Construir una Fila de Mario con Almohadillas (#)',
+            duration: '5 min',
+            prompt: 'Antes de construir la pirámide completa de Mario, imprime una sola fila de `int width = 5` caracteres `#` seguidos de un único salto de línea `\\n` al final.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+int main(void)
+{
+    int width = 5;
+
+    // TODO: Usa un bucle for para imprimir 'width' bloques '#'
+    // y al terminar el bucle imprime un salto de línea "\n"
+
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+
+int main(void)
+{
+    int width = 5;
+
+    for (int i = 0; i < width; i++)
+    {
+        printf("#");
+    }
+    printf("\n");
+
+    return 0;
+}
+`,
+            solutionExplanation: '1. En cada iteración se imprime `printf("#");` sin salto de línea para que los bloques queden pegados horizontalmente.\n2. Tras completarse el bucle, `printf("\\n");` cierra la fila. Este patrón es la base de la pirámide de Mario.'
+          }
+        ]
+      }
+    ],
     officialExercise: {
       title: 'Problem Set 1: Mario (Right-Aligned Pyramid)',
       notesUrl: 'https://cs50.harvard.edu/x/notes/1/',
@@ -164,27 +616,19 @@ Height: 4
     },
     simpleVideoExplanations: [
       {
-        chapterTitle: 'Inicio del vídeo · De bloques de Scratch a texto en C y el Compilador',
-        analogyTitle: '🗣️ Analogía del traductor simultáneo entre dos idiomas',
+        chapterTitle: 'Inicio del vídeo · Del Scratch a la sintaxis estricta de C',
+        analogyTitle: '🧱 Analogía de construir con planos de hormigón en vez de bloques de madera',
         paragraphs: [
-          'En la Clase 0 encajabas el bloque "Decir Hola" en Scratch; en la Clase 1 escribes `printf("Hola\\n");` en lenguaje C. Es exactamente la misma idea lógica, solo que ahora la escribes con el teclado en lugar de arrastrarla con el ratón.',
-          'Como el ordenador solo entiende ceros y unos (interruptores), necesitamos un programa llamado compilador que actúa como un traductor profesional: lee tu archivo de texto en C y lo convierte en un archivo de ceros y unos listo para ejecutarse.',
+          'En Scratch, si ponías un bloque en el sitio equivocado, el gato simplemente no se movía. En C, estás trabajando directamente con el cerebro de la máquina: debes decirle con exactitud si una variable es un número entero (`int`), una letra (`char`) o un decimal (`float`).',
+          'El compilador (`make` o `gcc`) es tu revisor más estricto: antes de dejarte ejecutar el programa, verifica cada punto y coma para garantizar que la máquina nunca se confunda.',
         ],
       },
       {
-        chapterTitle: 'Mitad del vídeo · Variables tipadas y Bucles (Loops)',
-        analogyTitle: '📦 Analogía de cajas etiquetadas según lo que guardas dentro',
+        chapterTitle: 'Mitad del vídeo · Bucles y Funciones (El gato que maúlla)',
+        analogyTitle: '🐱 Analogía de entrenar a un perro con una orden en lugar de darle instrucciones cada segundo',
         paragraphs: [
-          'En C, cada vez que creas una variable debes ponerle una etiqueta indicando qué tipo de dato guardará: `int` es una caja solo para números enteros (como `int height = 4;`), mientras que `char` guarda una sola letra. Así el ordenador sabe exactamente cuánto espacio reservar.',
-          'Para no repetir la misma línea diez veces, usamos un bucle `for`, que es como un contador de gimnasio: empieza en la repetición 1, comprueba si ya llegó a `height`, hace el ejercicio y suma 1 en cada vuelta.',
-        ],
-      },
-      {
-        chapterTitle: 'Final del vídeo · Cómo pensar la Pirámide de Mario',
-        analogyTitle: '🧱 Analogía de colocar ladrillos fila por fila en una cuadrícula',
-        paragraphs: [
-          'En la pantalla no puedes pegar un ladrillo `#` flotando a la derecha de la nada: el cursor siempre escribe de izquierda a derecha. Por eso, para que la cima de una pirámide de 4 pisos quede a la derecha, primero debes "empujarla" imprimiendo 3 espacios invisibles y luego 1 ladrillo `#`.',
-          'En el piso 2 imprimes 2 espacios y 2 ladrillos `#`, y así sucesivamente. Si te fijas, en cada fila la suma de espacios más ladrillos siempre da la altura total.',
+          'Si quieres que tu gato maúlle 100 veces, podrías escribir `printf("meow\\n");` cien veces seguidas. Pero eso es aburrido y fácil de estropear si decides cambiar el maullido por un ladrido.',
+          'Con un bucle `for`, le dices a la computadora: "haz esto mientras el contador sea menor que 100". Y si lo envuelves en una función `meow(100)`, le acabas de enseñar un truco nuevo al ordenador para usarlo siempre con una sola palabra.',
         ],
       },
     ],
@@ -192,76 +636,193 @@ Height: 4
   {
     id: 'module-2',
     weekLabel: 'Clase 2',
-    title: 'Arrays, Strings, Argumentos CLI y Criptografía',
-    subtitle: 'Taquillas en fila (arrays), textos como cadenas de letras y cifrado César',
-    videoUrl: 'https://www.youtube.com/watch?v=G7erq8mRYdk',
-    youtubeId: 'G7erq8mRYdk',
+    title: 'Arrays, Strings, Memoria y Criptografía',
+    subtitle: 'Casilleros contiguos en memoria, cadenas terminadas en \\0 y el cifrado César',
+    videoUrl: 'https://www.youtube.com/watch?v=F2z_A3b905A',
+    youtubeId: 'F2z_A3b905A',
     language: 'c',
     verifiedTopics:
-      'Cómo se guarda una lista de datos en memoria contigua (arrays), strings como filas de letras terminadas en el centinela \\0, recorrer letra por letra con un bucle y desplazar letras para cifrar mensajes (Caesar).',
+      'Compilación en 4 fases (preprocessing, compiling, assembling, linking), depuración paso a paso (debugging con printf o debug50), arrays como bloques contiguos de memoria, strings como arrays de char terminados en byte NUL (\\0), argumentos de línea de comandos (argc, argv) y cifrado César.',
     realWorldUseCase:
-      'Procesar cualquier palabra, contraseña o mensaje de texto recorriendo sus letras una por una y transformándolas según una regla.',
+      'Procesar texto y colecciones de datos asegurando que no leas fuera de los límites de memoria.',
     feynmanPrompt:
-      '¿Por qué el ordenador coloca un símbolo especial invisible (`\\0`) justo después de la última letra de una palabra guardada en memoria?',
-    starterChallengeTitle: 'Problem Set 2: Caesar (Cifrado por Desplazamiento ASCII)',
+      '¿Por qué una palabra de 4 letras ocupa en realidad 5 bytes en la memoria de un ordenador?',
+    starterChallengeTitle: 'Problem Set 2: Caesar (Cifrado por Desplazamiento en C)',
     starterCode: `#include <stdio.h>
+#include <ctype.h>
 
 int main(void)
 {
-    char plaintext[] = "HELLO";
-    int key = 1;
+    int key = 3;
+    char text[] = "HELLO";
 
-    printf("Plaintext: %s\\n", plaintext);
-    // TODO: Recorre cada carácter de plaintext hasta encontrar '\\0'
-    // Desplaza cada letra mayúscula usando la fórmula:
-    // char rotated = ((plaintext[i] - 'A' + key) % 26) + 'A';
-    // e imprime el resultado en "Ciphertext: "
+    // TODO: Recorre 'text' con un bucle for.
+    // Para cada letra mayúscula, desplázala 'key' posiciones en el abecedario:
+    // c = ((p - 'A' + key) % 26) + 'A';
 
+    printf("Texto cifrado: %s\\n", text);
     return 0;
 }
 `,
     allowedConceptsConstraint:
-      'SOLO puedes usar conceptos hasta la Clase 2 de CS50 (C básico, arrays, strings con \\0, código ASCII y cifrado César). PROHIBIDO hablar de punteros avanzados, malloc, Python o SQL.',
+      'SOLO puedes usar conceptos hasta la Clase 2 (arrays, strings, char, strlen, isupper, islower, argc/argv y fórmulas algebraicas con módulo %). PROHIBIDO mencionar punteros con malloc/free o estructuras de datos avanzadas.',
+    chapters: [
+      {
+        id: 'c2-ch1',
+        chapterNumber: 1,
+        title: 'Arrays y Memoria Contigua',
+        timeRange: '00:00 - 00:35',
+        startSeconds: 0,
+        summary: 'Cómo los arrays reservan casilleros consecutivos en la memoria RAM y cómo acceder a sus elementos mediante índices con base 0.',
+        microExercises: [
+          {
+            id: 'c2-ex1',
+            title: 'Cálculo de la Media en un Array de Puntuaciones',
+            duration: '5 min',
+            prompt: 'Dado un array de 3 notas enteras {72, 73, 33}, suma sus valores en un bucle for y calcula su media como número decimal (float).',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+int main(void)
+{
+    int scores[3] = {72, 73, 33};
+
+    // TODO: Suma las 3 notas y calcula la media como float
+    float average = 0.0;
+
+    printf("Media: %.2f\n", average);
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+
+int main(void)
+{
+    int scores[3] = {72, 73, 33};
+    int sum = 0;
+
+    for (int i = 0; i < 3; i++)
+    {
+        sum += scores[i];
+    }
+
+    float average = sum / 3.0;
+    printf("Media: %.2f\n", average);
+    return 0;
+}
+`,
+            solutionExplanation: '1. `scores[i]` accede al valor en la posición i.\n2. Al dividir entre `3.0` (número decimal), C realiza división de punto flotante en lugar de truncar a entero.'
+          }
+        ]
+      },
+      {
+        id: 'c2-ch2',
+        chapterNumber: 2,
+        title: 'Strings y el Centinela NUL (\\0)',
+        timeRange: '00:35 - 01:10',
+        startSeconds: 2100,
+        summary: 'Un string no es un tipo primitivo en C: es un array de caracteres que finaliza obligatoriamente con el byte cero especial (\\0).',
+        microExercises: [
+          {
+            id: 'c2-ex2',
+            title: 'Recorrer un String hasta el Centinela \\0',
+            duration: '5 min',
+            prompt: 'Recorre una cadena de caracteres carácter por carácter usando un bucle que se detenga automáticamente cuando encuentre `\\0`. Imprime cada letra en una línea.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+int main(void)
+{
+    char word[] = "HI!";
+
+    // TODO: Recorre word[i] mientras word[i] != '\\0' e imprime cada carácter
+    
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+
+int main(void)
+{
+    char word[] = "HI!";
+
+    for (int i = 0; word[i] != '\0'; i++)
+    {
+        printf("%c\n", word[i]);
+    }
+    return 0;
+}
+`,
+            solutionExplanation: '1. `word[i] != \'\\0\'`: Es la forma idiomática en que C sabe dónde termina un texto en memoria sin necesidad de almacenar la longitud por separado.'
+          }
+        ]
+      },
+      {
+        id: 'c2-ch3',
+        chapterNumber: 3,
+        title: 'Argumentos de Línea de Comandos (argc, argv)',
+        timeRange: '01:10 - Final',
+        startSeconds: 4200,
+        summary: 'Paso de parámetros desde la terminal al programa (`./program arg1`) utilizando el contador argc y el array de cadenas argv.',
+        microExercises: [
+          {
+            id: 'c2-ex3',
+            title: 'Verificación de Argumentos de Entrada',
+            duration: '5 min',
+            prompt: 'En main, verifica si se pasó exactamente un argumento adicional (`argc == 2`). Si no es así, imprime un mensaje de error y devuelve 1.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+int main(int argc, char *argv[])
+{
+    // TODO: Si argc != 2, imprime "Uso: ./programa nombre\n" y return 1;
+    // Si es correcto, imprime "Hola, %s\n" con argv[1]
+    
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+
+int main(int argc, char *argv[])
+{
+    if (argc != 2)
+    {
+        printf("Uso: ./programa nombre\n");
+        return 1;
+    }
+
+    printf("Hola, %s\n", argv[1]);
+    return 0;
+}
+`,
+            solutionExplanation: '1. `argv[0]` es siempre el nombre del ejecutable.\n2. `argv[1]` es el primer argumento pasado por el usuario.\n3. Devolver 1 indica un error al sistema operativo.'
+          }
+        ]
+      }
+    ],
     officialExercise: {
-      title: 'Problem Set 2: Caesar Cipher',
+      title: 'Problem Set 2: Caesar (Cifrado por Desplazamiento en C)',
       notesUrl: 'https://cs50.harvard.edu/x/notes/2/',
       psetUrl: 'https://cs50.harvard.edu/x/psets/2/caesar/',
-      goal: 'Cifrar un mensaje de texto (`char plaintext[]`) desplazando cada letra en el alfabeto según una clave numérica (`int key`) aplicando la rueda del abecedario `(c - \'A\' + key) % 26 + \'A\'`.',
+      goal: 'Implementar el algoritmo de cifrado César en C para desplazar cada letra mayúscula de un texto plano `key` posiciones en el abecedario circular.',
       specs: [
-        'Mantén el arreglo `char plaintext[] = "HELLO";` y la clave `int key = 1;`.',
-        'Recorre el arreglo con un bucle `for (int i = 0; plaintext[i] != \'\\0\'; i++)`.',
-        'Para cada letra mayúscula, conviértela a posición del abecedario (`0` a `25`) restando `\'A\'`, suma `key`, aplica `% 26` y vuelve a sumar `\'A\'`.',
-        'Imprime el texto cifrado precedido por `Ciphertext: ` y finaliza con `\\n`.',
+        'Usa la fórmula circular: `c = ((p - \'A\' + key) % 26) + \'A\'`.',
+        'Conserva los caracteres no alfabéticos sin alteración.',
+        'Muestra el resultado final precedido por `ciphertext: `.',
       ],
-      usageExample: `$ ./caesar
-Plaintext: HELLO
-Ciphertext: IFMMP`,
+      usageExample: `$ ./caesar 3
+plaintext:  HELLO
+ciphertext: KHOOR`,
       check50: 'check50 cs50/problems/2024/x/caesar',
       submit50: 'submit50 cs50/problems/2024/x/caesar',
     },
     simpleVideoExplanations: [
       {
-        chapterTitle: 'Primera parte del vídeo · ¿Qué es un Array?',
-        analogyTitle: '🗄️ Analogía de una fila de taquillas numeradas desde el 0',
+        chapterTitle: 'Mitad del vídeo · ¿Qué es exactamente una cadena de texto en C?',
+        analogyTitle: '🏷️ Analogía del cartel con un punto final invisible',
         paragraphs: [
-          'En lugar de crear veinte variables sueltas (`nota1`, `nota2`, `nota3`...), un array es como un pasillo de taquillas de gimnasio pegadas una al lado de la otra bajo un mismo nombre. La primera taquilla siempre lleva el número 0, la segunda el 1, y así sucesivamente.',
-          'Como todas las taquillas están juntas en fila, puedes pedirle a un bucle `for` que vaya abriendo la taquilla `i` paso a paso en una fracción de segundo.',
-        ],
-      },
-      {
-        chapterTitle: 'Mitad del vídeo · Palabras (Strings) y el punto final invisible (\\0)',
-        analogyTitle: '🚂 Analogía de un tren de letras con un vagón de cola que avisa del final',
-        paragraphs: [
-          'Para el ordenador, la palabra `"HOLA"` no es más que un array de 4 taquillas seguidas con las letras `H`, `O`, `L`, `A` más una quinta taquilla extra con el símbolo `\\0` (llamado carácter nulo).',
-          'Ese `\\0` funciona como el vagón de cola de un tren: le avisa a `printf` de que ahí termina exactamente la palabra y que no debe seguir leyendo las taquillas vecinas.',
-        ],
-      },
-      {
-        chapterTitle: 'Final del vídeo · Criptografía y la rueda del Cifrado César',
-        analogyTitle: '🎡 Analogía de las agujas de un reloj que vuelven a empezar tras las 12',
-        paragraphs: [
-          'Cifrar un mensaje con el método de Julio César consiste en mover cada letra unos pasos hacia adelante en el abecedario: si la clave es 1, la `A` se convierte en `B` y `"HELLO"` se convierte en `"IFMMP"`.',
-          '¿Y qué pasa si llegas a la `Z` y sumas 1? Igual que un reloj pasa de las 12 de nuevo a la 1 usando el resto de dividir (`%`), en programación usamos `% 26` para dar la vuelta al abecedario y volver suavemente a la `A`.',
+          'En otros lenguajes, un texto parece una sola cosa mágica. En C, es una fila de casilleros de correos contiguos en la memoria RAM, donde cada casillero guarda una letra.',
+          'Para que la computadora no siga leyendo la basura que hay en la memoria después de tu palabra, C añade al final un casillero con un cero invisible llamado `\\0` (NUL). Cuando el lector de C llega al `\\0`, sabe que el mensaje ha terminado.',
         ],
       },
     ],
@@ -269,84 +830,223 @@ Ciphertext: IFMMP`,
   {
     id: 'module-3',
     weekLabel: 'Clase 3',
-    title: 'Algoritmos: Búsqueda, Ordenamiento, Big O y Recursividad',
-    subtitle: 'Velocidad de algoritmos, ordenar cartas y muñecas rusas (recursividad)',
-    videoUrl: 'https://www.youtube.com/watch?v=zU0DbilHvYM',
-    youtubeId: 'zU0DbilHvYM',
-    language: 'python',
+    title: 'Algoritmos: Búsqueda, Ordenamiento y Complejidad',
+    subtitle: 'Notación Big O, Búsqueda Binaria, Selection Sort y Merge Sort recursivo',
+    videoUrl: 'https://www.youtube.com/watch?v=4U-m4i7_5Z0',
+    youtubeId: '4U-m4i7_5Z0',
+    language: 'c',
     verifiedTopics:
-      'Búsqueda lineal vs búsqueda binaria, métodos para ordenar datos (Bubble Sort, Selection Sort, Merge Sort), cómo medir la rapidez (Big O) y funciones que se llaman a sí mismas con un caso base (recursividad).',
+      'Complejidad temporal (Big O y Big Omega), Búsqueda Lineal O(n) vs Búsqueda Binaria O(log n), algoritmos de ordenamiento (Selection Sort, Bubble Sort, Merge Sort) y recursividad.',
     realWorldUseCase:
-      'Elegir el método adecuado para buscar y contar datos (como votos en una elección) sin que el ordenador se vuelva lento cuando crecen los participantes.',
+      'Elegir el algoritmo adecuado para que tu aplicación responda en milisegundos en vez de horas al escalar.',
     feynmanPrompt:
-      '¿Por qué no puedes aplicar búsqueda binaria sobre una lista de nombres que está desordenada?',
-    starterChallengeTitle: 'Problem Set 3: Plurality (Conteo Electoral y Búsqueda del Ganador)',
-    starterCode: `# CS50 Clase 3 — Plurality Election
-# Cuenta los votos de cada candidato y determina el ganador con mayor puntuación.
+      '¿Por qué ordenar una lista antes de buscar puede ahorrar tiempo a largo plazo?',
+    starterChallengeTitle: 'Problem Set 3: Binary Search & Selection Sort en C',
+    starterCode: `#include <stdio.h>
 
-candidates = [
-    {"name": "Alice", "votes": 0},
-    {"name": "Bob", "votes": 0},
-    {"name": "Charlie", "votes": 0},
-]
+int binary_search(int arr[], int size, int target)
+{
+    int left = 0;
+    int right = size - 1;
 
-ballots = ["Alice", "Bob", "Alice", "Charlie", "Alice", "Bob"]
+    // TODO: Implementa el bucle de búsqueda binaria (while left <= right)
+    // Calcula mid, compara arr[mid] con target y ajusta left o right
+    // Devuelve el índice si se encuentra, o -1 si no existe
 
-def vote(name):
-    # TODO: Busca el candidato cuyo 'name' coincida, suma 1 a 'votes' y devuelve True.
-    # Si no existe, devuelve False.
-    return False
+    return -1;
+}
 
-def print_winner():
-    # TODO: Encuentra el número máximo de votos e imprime el nombre del candidato ganador.
-    pass
-
-for b in ballots:
-    vote(b)
-
-print_winner()
+int main(void)
+{
+    int numbers[] = {11, 23, 34, 42, 56, 68, 77, 89, 95};
+    int target = 42;
+    int idx = binary_search(numbers, 9, target);
+    printf("Target %d at index: %d\\n", target, idx);
+    return 0;
+}
 `,
     allowedConceptsConstraint:
-      'SOLO puedes hablar de los conceptos de la Clase 3: búsqueda lineal, búsqueda binaria, ordenamiento (Selection/Bubble/Merge Sort), velocidad Big O, candidatos con nombre/votos y recursividad con caso base.',
+      'SOLO puedes usar conceptos de la Clase 3 (notación Big O, búsqueda lineal/binaria, bubble sort, selection sort, merge sort y recursión en C).',
+    chapters: [
+      {
+        id: 'c3-ch1',
+        chapterNumber: 1,
+        title: 'Búsqueda Lineal vs Búsqueda Binaria',
+        timeRange: '00:00 - 00:45',
+        startSeconds: 0,
+        summary: 'Comparación entre revisar elementos uno por uno (O(n)) y dividir la lista ordenada por la mitad en cada paso (O(log n)).',
+        microExercises: [
+          {
+            id: 'c3-ex1',
+            title: 'Búsqueda Lineal en una Lista de Números',
+            duration: '5 min',
+            prompt: 'Implementa una búsqueda lineal que recorra un array y devuelva el índice donde se encuentra el número 42.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+int linear_search(int arr[], int size, int target)
+{
+    // TODO: Recorre el array con for. Si arr[i] == target, return i;
+    return -1;
+}
+
+int main(void)
+{
+    int numbers[] = {20, 500, 10, 5, 100, 1, 50};
+    int idx = linear_search(numbers, 7, 5);
+    printf("Encontrado en indice: %d\n", idx);
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+
+int linear_search(int arr[], int size, int target)
+{
+    for (int i = 0; i < size; i++)
+    {
+        if (arr[i] == target)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int main(void)
+{
+    int numbers[] = {20, 500, 10, 5, 100, 1, 50};
+    int idx = linear_search(numbers, 7, 5);
+    printf("Encontrado en indice: %d\n", idx);
+    return 0;
+}
+`,
+            solutionExplanation: '1. En el peor caso, la búsqueda lineal inspecciona los n elementos (complejidad O(n)).\n2. Si el elemento no existe, devuelve -1 como convención de error.'
+          }
+        ]
+      },
+      {
+        id: 'c3-ch2',
+        chapterNumber: 2,
+        title: 'Ordenamiento: Selection Sort y Bubble Sort',
+        timeRange: '00:45 - 01:25',
+        startSeconds: 2700,
+        summary: 'Cómo comparar y reordenar elementos en memoria para prepararlos para algoritmos de alta velocidad.',
+        microExercises: [
+          {
+            id: 'c3-ex2',
+            title: 'Intercambio de Variables (Swap)',
+            duration: '5 min',
+            prompt: 'Para ordenar una lista necesitamos intercambiar dos elementos usando una variable temporal auxiliar. Completa la función swap.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+int main(void)
+{
+    int a = 10;
+    int b = 20;
+
+    // TODO: Intercambia los valores de a y b usando una variable temp
+    int temp = a;
+
+    printf("a = %d, b = %d\n", a, b);
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+
+int main(void)
+{
+    int a = 10;
+    int b = 20;
+
+    int temp = a;
+    a = b;
+    b = temp;
+
+    printf("a = %d, b = %d\n", a, b);
+    return 0;
+}
+`,
+            solutionExplanation: '1. Guardamos el valor de `a` en `temp` para no sobrescribirlo.\n2. Asignamos `b` a `a`.\n3. Recuperamos el valor original desde `temp` y lo guardamos en `b`.'
+          }
+        ]
+      },
+      {
+        id: 'c3-ch3',
+        chapterNumber: 3,
+        title: 'Recursión y Merge Sort (O(n log n))',
+        timeRange: '01:25 - Final',
+        startSeconds: 5100,
+        summary: 'Funciones que se llaman a sí mismas con un caso base y división recursiva para lograr ordenamiento garantizado en tiempo O(n log n).',
+        microExercises: [
+          {
+            id: 'c3-ex3',
+            title: 'Función Recursiva de Factorial',
+            duration: '5 min',
+            prompt: 'Implementa una función recursiva `int factorial(int n)` con su caso base (`if n <= 1 return 1`) y llamada recursiva.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+int factorial(int n)
+{
+    // TODO: Caso base y caso recursivo (n * factorial(n - 1))
+    return 1;
+}
+
+int main(void)
+{
+    printf("5! = %d\n", factorial(5));
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+
+int factorial(int n)
+{
+    if (n <= 1)
+    {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+
+int main(void)
+{
+    printf("5! = %d\n", factorial(5));
+    return 0;
+}
+`,
+            solutionExplanation: '1. Todo algoritmo recursivo necesita un caso base que detenga la recursión.\n2. La llamada `n * factorial(n - 1)` va apilando marcos en el call stack hasta resolver el caso base.'
+          }
+        ]
+      }
+    ],
     officialExercise: {
-      title: 'Problem Set 3: Plurality Election',
+      title: 'Problem Set 3: Runoff / Plurality (Algoritmos Electorales)',
       notesUrl: 'https://cs50.harvard.edu/x/notes/3/',
-      psetUrl: 'https://cs50.harvard.edu/x/psets/3/plurality/',
-      goal: 'Implementar las funciones `vote(name)` y `print_winner()` para contabilizar papeletas electorales sobre una lista de candidatos y determinar mediante búsqueda lineal quién obtuvo el máximo número de votos.',
+      psetUrl: 'https://cs50.harvard.edu/x/psets/3/runoff/',
+      goal: 'Implementar el algoritmo de búsqueda y ordenamiento de votos electorales por orden de preferencia para encontrar al ganador o eliminar al candidato con menos votos.',
       specs: [
-        'En `vote(name)`, recorre la lista `candidates`. Si `candidate["name"] == name`, incrementa `candidate["votes"] += 1` y devuelve `True`.',
-        'Si tras recorrer toda la lista el nombre no existe, `vote(name)` debe devolver `False`.',
-        'En `print_winner()`, calcula primero el valor máximo de `votes` entre todos los elementos de `candidates`.',
-        'Imprime el nombre (`candidate["name"]`) de cada candidato cuyo número de votos sea igual a ese máximo.',
+        'Encuentra el mínimo de votos entre los candidatos no eliminados.',
+        'Determina si la elección es un empate entre todos los candidatos restantes.',
+        'Elimina al candidato o candidatos con menor cantidad de votos.',
       ],
-      usageExample: `$ python3 plurality.py
-Winner: Alice (3 votes)`,
-      check50: 'check50 cs50/problems/2024/x/plurality',
-      submit50: 'submit50 cs50/problems/2024/x/plurality',
+      usageExample: `$ ./runoff Alice Bob Charlie
+Number of voters: 3
+Rank 1: Alice
+Rank 2: Bob
+Rank 3: Charlie
+Alice wins!`,
+      check50: 'check50 cs50/problems/2024/x/runoff',
+      submit50: 'submit50 cs50/problems/2024/x/runoff',
     },
     simpleVideoExplanations: [
       {
-        chapterTitle: 'Inicio del vídeo · Búsqueda Lineal vs. Binaria y Big O',
-        analogyTitle: '🚪 Analogía de buscar a un amigo detrás de 10 puertas cerradas',
+        chapterTitle: 'Mitad del vídeo · Búsqueda Binaria y la Guía Telefónica revisada',
+        analogyTitle: '📚 Analogía de doblar una servilleta por la mitad',
         paragraphs: [
-          'Si los números detrás de las puertas están mezclados al azar, no tienes más remedio que abrir puerta por puerta desde la primera hasta la última (Búsqueda Lineal). Pero si están ordenados de menor a mayor, puedes abrir directamente la puerta del centro y descartar la mitad de las puertas en cada paso (Búsqueda Binaria).',
-          'Los informáticos llaman "Big O" simplemente a responder: "¿Cuánto más tardaré si mañana hay el doble de puertas?".',
-        ],
-      },
-      {
-        chapterTitle: 'Mitad del vídeo · Cómo ordena un ordenador (Ordenar una baraja)',
-        analogyTitle: '🃏 Analogía de ordenar las cartas que tienes en la mano',
-        paragraphs: [
-          'Cuando te reparten cartas desordenadas en un juego de mesa, sueles buscar la carta más pequeña de todas y colocarla al principio, luego la segunda más pequeña, y así hasta terminar (eso es Selection Sort).',
-          'Otra forma mucho más rápida cuando tienes miles de cartas es dividir el mazo en dos mitades, ordenar cada mitad y luego ir mezclando las dos pilas ordenadas fijándote solo en la carta superior de cada montón (Merge Sort).',
-        ],
-      },
-      {
-        chapterTitle: 'Final del vídeo · Recursividad',
-        analogyTitle: '🪆 Analogía de las muñecas rusas (Matrioskas) con una muñeca final maciza',
-        paragraphs: [
-          'Una función recursiva es una tarea que para resolverse abre una versión un poquito más pequeña de sí misma, igual que al abrir una muñeca rusa encuentras otra idéntica pero más pequeña dentro.',
-          'Para que no abras muñecas hasta el infinito, toda recursividad necesita una última muñeca pequeñita que ya no se abre (el "caso base"), momento en el que das la tarea por terminada.',
+          'Si tienes una lista desordenada, no te queda más remedio que mirar elemento por elemento. Pero si está ordenada alfabéticamente o de menor a mayor, cada pregunta que haces te permite tachar el 50% de las opciones restantes.',
+          'Incluso con 4.000 millones de números, con solo 32 preguntas puedes encontrar cualquiera. Eso es lo que significa O(log n).',
         ],
       },
     ],
@@ -354,67 +1054,149 @@ Winner: Alice (3 votes)`,
   {
     id: 'module-4',
     weekLabel: 'Clase 4',
-    title: 'Memoria, Punteros, Direcciones y Gestión Dinámica',
-    subtitle: 'Direcciones postales de la memoria (& y *), intercambiar vasos y punteros',
-    videoUrl: 'https://www.youtube.com/watch?v=xRW70LgrEho',
-    youtubeId: 'xRW70LgrEho',
+    title: 'Memoria: Punteros, Direcciones Hexadecimales y malloc',
+    subtitle: 'El operador de dirección &, desreferencia *, gestión del heap y valgrind',
+    videoUrl: 'https://www.youtube.com/watch?v=F_fP_pY2l_M',
+    youtubeId: 'F_fP_pY2l_M',
     language: 'c',
     verifiedTopics:
-      'Direcciones de memoria (hexadecimal), el operador & (dime la dirección postal) y * (ve a esa dirección), por qué intercambiar dos variables requiere un vaso auxiliar (swap) y pedir memoria prestada con malloc/free.',
+      'Direcciones de memoria en hexadecimal (0x...), operador de dirección (&), operador de desreferencia (*), qué es un puntero (una variable que almacena una dirección), memoria dinámica con malloc y free, el call stack vs el heap, segmentation fault y detección de fugas con valgrind.',
     realWorldUseCase:
-      'Entender dónde viven realmente los datos en la memoria RAM y cómo modificar un dato original sin hacer copias innecesarias.',
+      'Controlar directamente los recursos del ordenador sin desperdiciar memoria RAM en servidores y sistemas embebidos.',
     feynmanPrompt:
-      'Si tienes un vaso lleno de zumo de naranja y otro lleno de agua, ¿por qué necesitas un tercer vaso vacío para intercambiar sus líquidos?',
-    starterChallengeTitle: 'Problem Set 4: Pointers & Swap por Referencia en Memoria',
+      'Explica qué es un puntero utilizando la analogía de la dirección postal de una casa.',
+    starterChallengeTitle: 'Problem Set 4: Filter (Manipulación de Píxeles en C)',
     starterCode: `#include <stdio.h>
+
+void swap(int *a, int *b)
+{
+    // TODO: Usa punteros para intercambiar el contenido de las variables
+    // apuntadas por 'a' y 'b'
+}
 
 int main(void)
 {
-    int a = 10;
-    int b = 20;
-
-    printf("Before swap: a = %d, b = %d\\n", a, b);
-
-    // TODO: Declara una variable temporal 'int tmp' y realiza el intercambio
-    // de valores e imprime "After swap: a = %d, b = %d\\n"
-
+    int x = 1;
+    int y = 2;
+    swap(&x, &y);
+    printf("x: %d, y: %d\\n", x, y);
     return 0;
 }
 `,
     allowedConceptsConstraint:
-      'SOLO puedes hablar de los conceptos de la Clase 4: memoria RAM, direcciones postales (&), punteros (*), el intercambio de valores con un vaso temporal (swap) y pedir/devolver memoria (malloc/free).',
+      'SOLO puedes usar conceptos de la Clase 4 (punteros, &, *, malloc, free, stack vs heap, archivos FILE*, valgrind y aritmética de punteros).',
+    chapters: [
+      {
+        id: 'c4-ch1',
+        chapterNumber: 1,
+        title: 'Direcciones de Memoria y Punteros (& y *)',
+        timeRange: '00:00 - 00:40',
+        startSeconds: 0,
+        summary: 'Cada byte en la memoria RAM tiene una dirección única en formato hexadecimal. El operador & obtiene la dirección y * accede al valor apuntado.',
+        microExercises: [
+          {
+            id: 'c4-ex1',
+            title: 'Imprimir la Dirección de una Variable',
+            duration: '5 min',
+            prompt: 'Declara un entero `int n = 50;` e imprime su dirección física de memoria con el especificador `%p` y el operador `&`.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+
+int main(void)
+{
+    int n = 50;
+
+    // TODO: Imprime la dirección de n con printf("%p\n", ...)
+    
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+
+int main(void)
+{
+    int n = 50;
+    printf("%p\n", (void *)&n);
+    return 0;
+}
+`,
+            solutionExplanation: '1. `&n` obtiene la dirección de memoria donde reside la variable n.\n2. `%p` formatea la dirección en hexadecimal (ej. 0x7ffe...).'
+          }
+        ]
+      },
+      {
+        id: 'c4-ch2',
+        chapterNumber: 2,
+        title: 'Asignación Dinámica con malloc y free',
+        timeRange: '00:40 - 01:20',
+        startSeconds: 2400,
+        summary: 'Cómo solicitar memoria al sistema operativo en tiempo de ejecución en el Heap con malloc y devolverla con free para evitar fugas de memoria (memory leaks).',
+        microExercises: [
+          {
+            id: 'c4-ex2',
+            title: 'Reservar y Liberar un Entero en el Heap',
+            duration: '5 min',
+            prompt: 'Usa `malloc(sizeof(int))` para reservar espacio en el heap, asigna el valor 42 mediante `*p = 42;`, imprímelo y libéralo con `free(p)`.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+    // TODO: Reserva memoria para un int con malloc
+    int *p = NULL;
+
+    // TODO: Asigna el valor 42, imprímelo y libera la memoria con free
+    
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+    int *p = malloc(sizeof(int));
+    if (p == NULL)
+    {
+        return 1;
+    }
+
+    *p = 42;
+    printf("Valor en heap: %d\n", *p);
+
+    free(p);
+    return 0;
+}
+`,
+            solutionExplanation: '1. `malloc(sizeof(int))` solicita 4 bytes en el Heap.\n2. Siempre se comprueba si devolvió `NULL` (memoria agotada).\n3. `free(p)` entrega los bytes de vuelta al sistema operativo.'
+          }
+        ]
+      }
+    ],
     officialExercise: {
-      title: 'Problem Set 4: Memory Swap & Pointer Indirection',
+      title: 'Problem Set 4: Recover (Recuperador de Imágenes JPEG)',
       notesUrl: 'https://cs50.harvard.edu/x/notes/4/',
-      psetUrl: 'https://cs50.harvard.edu/x/psets/4/',
-      goal: 'Comprender cómo se intercambian dos valores en memoria utilizando una variable auxiliar `int tmp` evitando sobrescribir el valor original antes de copiarlo.',
+      psetUrl: 'https://cs50.harvard.edu/x/psets/4/recover/',
+      goal: 'Recuperar imágenes JPEG de una tarjeta de memoria forense inspeccionando bloques de 512 bytes y sus cabeceras mágicas (0xff 0xd8 0xff).',
       specs: [
-        'Conserva las variables iniciales `int a = 10;` e `int b = 20;`.',
-        'Utiliza una variable temporal `int tmp` para guardar el valor original de `a` antes de sobrescribirlo.',
-        'Asigna el valor de `b` en `a`, y después asigna `tmp` en `b`.',
-        'Imprime el estado final exactamente con `printf("After swap: a = %d, b = %d\\n", a, b);`.',
+        'Abre el archivo forense con `fopen` en modo binario.',
+        'Lee bloques de 512 bytes con `fread`.',
+        'Detecta el inicio de un JPEG con `buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff`.',
+        'Escribe bloques consecutivos en archivos `###.jpg` hasta el final.',
       ],
-      usageExample: `$ ./swap
-Before swap: a = 10, b = 20
-After swap: a = 20, b = 10`,
-      check50: 'check50 cs50/problems/2024/x/filter/less',
-      submit50: 'submit50 cs50/problems/2024/x/filter/less',
+      usageExample: `$ ./recover card.raw
+50 JPEGs recovered.`,
+      check50: 'check50 cs50/problems/2024/x/recover',
+      submit50: 'submit50 cs50/problems/2024/x/recover',
     },
     simpleVideoExplanations: [
       {
-        chapterTitle: 'Inicio del vídeo · ¿Qué es un Puntero en C?',
-        analogyTitle: '📬 Analogía de la casa de tu amigo frente a su dirección escrita en un papel',
+        chapterTitle: 'Mitad del vídeo · ¿Qué es realmente un puntero?',
+        analogyTitle: '📬 Analogía de apuntar la dirección de la casa de tu amigo en un papelito',
         paragraphs: [
-          'Una variable normal (`int a = 10;`) es como una casa donde vive el número 10. Un puntero (`int *p`) no es otra casa, sino un papelito donde apuntas la calle y el número exacto donde está ubicada esa casa en la memoria del ordenador.',
-          'El símbolo `&a` significa "¿cuál es la dirección de esta casa?", mientras que el asterisco `*p` significa "camina hasta la dirección escrita en el papel y mira qué hay dentro".',
-        ],
-      },
-      {
-        chapterTitle: 'Mitad del vídeo · El problema de intercambiar dos valores (Swap)',
-        analogyTitle: '🥤 Analogía de dos vasos llenos y un tercer vaso vacío',
-        paragraphs: [
-          'Imagina que tienes zumo en el vaso `a` y leche en el vaso `b`. Si viertes directamente el vaso `b` sobre el `a`, pierdes el zumo para siempre. En programación pasa igual: si haces `a = b;`, el valor antiguo de `a` desaparece.',
-          'Por eso necesitamos un tercer vaso vacío llamado `int tmp`: primero viertes `a` en `tmp`, luego pasas `b` a `a`, y por último viertes `tmp` en `b`.',
+          'Un puntero no es la casa ni los muebles; es simplemente una nota adhesiva donde tienes anotada la dirección de la calle.',
+          'Si pasas una variable normal a una función en C, la máquina hace una fotocopia de los datos. Pero si le pasas un puntero (`&variable`), le estás dando la llave de la casa original para que pueda modificarla directamente.',
         ],
       },
     ],
@@ -422,68 +1204,184 @@ After swap: a = 20, b = 10`,
   {
     id: 'module-5',
     weekLabel: 'Clase 5',
-    title: 'Estructuras de Datos: Listas Enlazadas, Hash Tables y Árboles',
-    subtitle: 'Colas de supermercado, búsquedas del tesoro y archivadores alfabéticos',
-    videoUrl: 'https://www.youtube.com/watch?v=Q0xvQT87ekA',
-    youtubeId: 'Q0xvQT87ekA',
-    language: 'python',
+    title: 'Estructuras de Datos: Listas Enlazadas, Árboles y Tablas Hash',
+    subtitle: 'Nodos struct, punteros next, colisiones y el corrector ortográfico Speller',
+    videoUrl: 'https://www.youtube.com/watch?v=2T-A_3vwG3A',
+    youtubeId: '2T-A_3vwG3A',
+    language: 'c',
     verifiedTopics:
-      'Colas (Queues FIFO), Pilas (Stacks LIFO), Listas Enlazadas (nodos conectados por flechas), Tablas Hash (clasificar por inicial en cubetas) y Árboles de búsqueda.',
+      'Estructuras personalizadas (typedef struct), listas enlazadas dinámicas (singly linked lists), árboles binarios de búsqueda (BST), tablas hash con funciones hash, trie y el proyecto Speller.',
     realWorldUseCase:
-      'Organizar miles de palabras o contactos en cajones ordenados por su primera letra para encontrarlos al instante.',
+      'Organizar millones de registros para búsquedas casi instantáneas en tiempo O(1).',
     feynmanPrompt:
-      '¿En qué se parece una Tabla Hash a un archivador con 26 cajones etiquetados de la A a la Z?',
-    starterChallengeTitle: 'Problem Set 5: Speller (Función Hash y Tabla de Buckets)',
-    starterCode: `# CS50 Clase 5 — Speller Hash Table
-# Implementa una función hash que asigne cada palabra a un bucket entre 0 y N - 1.
+      '¿Por qué una tabla hash bien diseñada puede buscar un elemento mucho más rápido que un array tradicional?',
+    starterChallengeTitle: 'Problem Set 5: Speller (Corrector Ortográfico con Tabla Hash en C)',
+    starterCode: `#include <stdio.h>
+#include <string.h>
 
-N = 26
-words = ["apple", "banana", "avocado", "blueberry", "cherry"]
+unsigned int hash(const char *word)
+{
+    // TODO: Implementa una función hash simple que sume el código ASCII
+    // de los caracteres de 'word' y devuelva la suma módulo 26
+    return 0;
+}
 
-def hash_word(word):
-    # TODO: Devuelve el índice del bucket (0 a 25) según la primera letra de 'word'
-    # Pista: usa (ord(word[0].upper()) - ord('A')) % N
-    return 0
-
-for w in words:
-    print(f"{w} -> bucket {hash_word(w)}")
+int main(void)
+{
+    printf("Hash de 'cat': %u\\n", hash("cat"));
+    printf("Hash de 'dog': %u\\n", hash("dog"));
+    return 0;
+}
 `,
     allowedConceptsConstraint:
-      'SOLO puedes hablar de los conceptos de la Clase 5: colas, pilas, listas enlazadas, tablas hash (cajones de la A a la Z) y colisiones.',
+      'SOLO puedes usar conceptos de la Clase 5 (structs, nodos, listas enlazadas, árboles, tablas hash y proyecto speller).',
+    chapters: [
+      {
+        id: 'c5-ch1',
+        chapterNumber: 1,
+        title: 'Listas Enlazadas (Linked Lists)',
+        timeRange: '00:00 - 00:50',
+        startSeconds: 0,
+        summary: 'Cómo conectar elementos dispersos en la memoria mediante nodos con un puntero next, superando el tamaño fijo de los arrays.',
+        microExercises: [
+          {
+            id: 'c5-ex1',
+            title: 'Definir y Conectar dos Nodos de Lista Enlazada',
+            duration: '5 min',
+            prompt: 'Define un nodo `struct node` con un entero `val` y un puntero `next`. Enlaza dos nodos en memoria e imprime sus valores.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+    int number;
+    struct node *next;
+} node;
+
+int main(void)
+{
+    node *list = malloc(sizeof(node));
+    list->number = 1;
+    list->next = malloc(sizeof(node));
+    list->next->number = 2;
+    list->next->next = NULL;
+
+    // TODO: Recorre la lista con un bucle while e imprime cada número
+    
+    free(list->next);
+    free(list);
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+    int number;
+    struct node *next;
+} node;
+
+int main(void)
+{
+    node *list = malloc(sizeof(node));
+    list->number = 1;
+    list->next = malloc(sizeof(node));
+    list->next->number = 2;
+    list->next->next = NULL;
+
+    node *ptr = list;
+    while (ptr != NULL)
+    {
+        printf("%d\n", ptr->number);
+        ptr = ptr->next;
+    }
+
+    free(list->next);
+    free(list);
+    return 0;
+}
+`,
+            solutionExplanation: '1. `ptr->next` avanza al siguiente nodo en la cadena.\n2. El bucle termina cuando encuentra `NULL` al final de la lista.'
+          }
+        ]
+      },
+      {
+        id: 'c5-ch2',
+        chapterNumber: 2,
+        title: 'Tablas Hash y Funciones Hash',
+        timeRange: '00:50 - Final',
+        startSeconds: 3000,
+        summary: 'Combinación de un array y listas enlazadas para indexar palabras mediante una función matemática, logrando búsquedas en O(1).',
+        microExercises: [
+          {
+            id: 'c5-ex2',
+            title: 'Función Hash Básica por Primera Letra',
+            duration: '5 min',
+            prompt: 'Escribe una función hash que tome la primera letra de una palabra y devuelva su número de cubeta entre 0 y 25.',
+            language: 'c',
+            starterCode: `#include <stdio.h>
+#include <ctype.h>
+
+unsigned int hash_letter(const char *word)
+{
+    // TODO: Devuelve (toupper(word[0]) - 'A') % 26
+    return 0;
+}
+
+int main(void)
+{
+    printf("Cubeta para 'Apple': %u\n", hash_letter("Apple"));
+    printf("Cubeta para 'Banana': %u\n", hash_letter("Banana"));
+    return 0;
+}
+`,
+            solutionCode: `#include <stdio.h>
+#include <ctype.h>
+
+unsigned int hash_letter(const char *word)
+{
+    return (toupper(word[0]) - 'A') % 26;
+}
+
+int main(void)
+{
+    printf("Cubeta para 'Apple': %u\n", hash_letter("Apple"));
+    printf("Cubeta para 'Banana': %u\n", hash_letter("Banana"));
+    return 0;
+}
+`,
+            solutionExplanation: '1. `toupper` normaliza a mayúscula.\n2. Restar \'A\' convierte caracteres ASCII (\'A\'=65) en índices de 0 a 25.'
+          }
+        ]
+      }
+    ],
     officialExercise: {
-      title: 'Problem Set 5: Speller (Hash Function & Buckets)',
+      title: 'Problem Set 5: Speller (Corrector Ortográfico en C)',
       notesUrl: 'https://cs50.harvard.edu/x/notes/5/',
       psetUrl: 'https://cs50.harvard.edu/x/psets/5/speller/',
-      goal: 'Diseñar e implementar la función `hash_word(word)` del corrector ortográfico Speller de CS50 para clasificar palabras en `N = 26` cubetas (buckets) según su letra inicial.',
+      goal: 'Implementar las funciones `load`, `hash`, `check`, `size` y `unload` para verificar la ortografía de un texto cargando un diccionario en una tabla hash en C.',
       specs: [
-        'Toma el primer carácter de la palabra en mayúscula (`word[0].upper()`) y calcula su cajón entre `0` y `25` con `(ord(word[0].upper()) - ord(\'A\')) % N`.',
-        'Recorre la lista `words` e imprime cada palabra junto con el número de bucket asignado.',
-        'Observa cómo `"apple"` y `"avocado"` caen en el mismo cajón `0` (colisión).',
+        'Carga 140.000 palabras en la tabla hash asignando memoria dinámica.',
+        'Implementa la función hash optimizada para evitar colisiones.',
+        'Libera toda la memoria asignada en `unload` sin fugas en Valgrind.',
       ],
-      usageExample: `$ python3 speller.py
-apple -> bucket 0
-banana -> bucket 1
-avocado -> bucket 0
-blueberry -> bucket 1
-cherry -> bucket 2`,
+      usageExample: `$ ./speller texts/holmes.txt
+WORDS MISSPELLED:     178
+WORDS IN DICTIONARY:  143091
+TIME IN load:         0.03s
+TIME IN check:        0.04s`,
       check50: 'check50 cs50/problems/2024/x/speller',
       submit50: 'submit50 cs50/problems/2024/x/speller',
     },
     simpleVideoExplanations: [
       {
-        chapterTitle: 'Inicio del vídeo · Listas Enlazadas (Linked Lists)',
-        analogyTitle: '🗺️ Analogía de una gymkana o búsqueda del tesoro con pistas',
+        chapterTitle: 'Mitad del vídeo · La magia de las Tablas Hash',
+        analogyTitle: '🗄️ Analogía del archivador con 26 cajones con letras de la A a la Z',
         paragraphs: [
-          'En un array normal todas las taquillas tienen que estar pegadas en la misma pared. Una Lista Enlazada, en cambio, funciona como una búsqueda del tesoro: el primer cofre guarda un dato y una nota con la dirección exacta de en qué rincón de la casa está escondido el segundo cofre.',
-          'Gracias a eso, puedes añadir nuevos cofres en cualquier momento sin tener que mudar toda la fila de sitio.',
-        ],
-      },
-      {
-        chapterTitle: 'Mitad del vídeo · Tablas Hash y Colisiones',
-        analogyTitle: '🗂️ Analogía del archivador de una clínica con 26 cajones (A–Z)',
-        paragraphs: [
-          'Si tienes un millón de fichas de pacientes y quieres encontrar a "Beatriz" sin revisar todas las fichas, usas un archivador con 26 cajones de la A a la Z. La "función hash" es simplemente mirar la primera letra ("B") y saber al instante que debes abrir el cajón número 1.',
-          'Cuando dos personas empiezan por la misma letra (como "Ana" y "Alberto"), ambas fichas van al mismo cajón A: a eso lo llamamos una "colisión", y lo resolvemos enganchando las fichas de ese cajón una detrás de otra.',
+          'En vez de tener una sola pila gigante de 100.000 papeles, tienes un mueble con 26 cajones. Cuando llega una palabra que empieza por "M", vas directamente al cajón de la M.',
+          'Eso es una tabla hash: una función matemática que te dice exactamente en qué cajón buscar sin tener que revisar los demás.',
         ],
       },
     ],
@@ -491,63 +1389,113 @@ cherry -> bucket 2`,
   {
     id: 'module-6',
     weekLabel: 'Clase 6',
-    title: 'Python: De C a Alto Nivel, Librerías y Manejo de Excepciones',
-    subtitle: 'Escribir menos código y más legible en Python para analizar cadenas de ADN',
-    videoUrl: 'https://www.youtube.com/watch?v=N3zVFYQu3bU',
-    youtubeId: 'N3zVFYQu3bU',
+    title: 'Python: Sintaxis Limpia, Tipado Dinámico y Estructuras',
+    subtitle: 'Adiós a los puntos y comas: indentación, listas, diccionarios y legibilidad',
+    videoUrl: 'https://www.youtube.com/watch?v=F_fP_pY2l_M',
+    youtubeId: 'LfaMVlDaQ24',
     language: 'python',
     verifiedTopics:
-      'Traducción de lo aprendido en C a Python (sin puntos y comas ni gestión manual de memoria), listas, diccionarios y búsqueda de patrones repetidos en texto (análisis de ADN).',
+      'Comparativa C vs Python, tipado dinámico, sintaxis con indentación, strings como objetos de primera clase, listas, diccionarios, bucles for sobre colecciones, manejo de excepciones y bibliotecas estándar.',
     realWorldUseCase:
-      'Analizar textos largos, archivos de datos o secuencias biológicas con pocas líneas de código claro.',
+      'Desarrollar prototipos y servicios completos en una fracción del tiempo que requiere C.',
     feynmanPrompt:
-      '¿Cómo buscarías cuántas veces aparece la palabra `"AGATC"` dentro de una frase larga usando una ventana deslizante?',
-    starterChallengeTitle: 'Problem Set 6: DNA (Conteo de Repeticiones STR en Secuencias)',
-    starterCode: `# CS50 Clase 6 — DNA Sequence Analyzer
-# Cuenta cuántas veces aparece un marcador genético (ej. "AGATC") en una secuencia de ADN.
+      '¿Qué ventaja tiene que Python gestione la memoria automáticamente frente al uso de malloc en C?',
+    starterChallengeTitle: 'Problem Set 6: DNA / Sentimental Mario en Python',
+    starterCode: `# CS50 Clase 6 — Sentimental Mario en Python
 
-sequence = "AAGATCGAGATCGAGATCGT"
-subsequence = "AGATC"
+height = 4
 
-def count_occurrences(seq, sub):
-    # TODO: Cuenta y devuelve cuántas veces aparece 'sub' dentro de 'seq'
-    return 0
+# TODO: Imprime la pirámide de Mario en Python usando un bucle 'for'
+# Recuerda que en Python puedes multiplicar cadenas: " " * espacios + "#" * bloques
 
-print("STR:", subsequence)
-print("Repeticiones encontradas:", count_occurrences(sequence, subsequence))
+for row in range(1, height + 1):
+    print(" " * (height - row) + "#" * row)
 `,
     allowedConceptsConstraint:
-      'SOLO puedes hablar de los conceptos de la Clase 6: sintaxis de Python frente a C, cadenas de texto (strings), listas, diccionarios y conteo de subcadenas en el ejercicio de ADN.',
+      'SOLO puedes usar conceptos de Python vistos en la Clase 6 (variables, listas, diccionarios, slicing de strings, range, def y manejo de excepciones).',
+    chapters: [
+      {
+        id: 'c6-ch1',
+        chapterNumber: 1,
+        title: 'De C a Python: Sintaxis y Tipado Dinámico',
+        timeRange: '00:00 - 00:40',
+        startSeconds: 0,
+        summary: 'Cómo Python elimina la necesidad de declarar tipos explícitos y usa indentación en lugar de llaves {} para definir bloques de código.',
+        microExercises: [
+          {
+            id: 'c6-ex1',
+            title: 'Sentimental Mario: Multiplicación de Strings',
+            duration: '5 min',
+            prompt: 'En Python `"#" * 3` produce `"###"`. Imprime una fila con 3 espacios y 4 almohadillas en una sola línea.',
+            language: 'python',
+            starterCode: `# TODO: Imprime 3 espacios y 4 almohadillas multiplicando cadenas
+print(" " * 3 + "#" * 4)
+`,
+            solutionCode: `print(" " * 3 + "#" * 4)
+`,
+            solutionExplanation: '1. En Python las cadenas son objetos con operadores sobrecargados.\n2. `" " * n` repite el espacio n veces de forma concisa e idiomática.'
+          }
+        ]
+      },
+      {
+        id: 'c6-ch2',
+        chapterNumber: 2,
+        title: 'Diccionarios y Comprensión de Listas',
+        timeRange: '00:40 - Final',
+        startSeconds: 2400,
+        summary: 'Estructuras de clave-valor nativas en Python y cómo procesar listas con expresiones funcionales de una línea.',
+        microExercises: [
+          {
+            id: 'c6-ex2',
+            title: 'Filtrar Estudiantes por Casa en Hogwarts',
+            duration: '5 min',
+            prompt: 'Dado un diccionario de alumnos y casas, usa un bucle for para imprimir solo los que pertenecen a "Gryffindor".',
+            language: 'python',
+            starterCode: `students = [
+    {"name": "Harry", "house": "Gryffindor"},
+    {"name": "Draco", "house": "Slytherin"},
+    {"name": "Hermione", "house": "Gryffindor"},
+]
+
+# TODO: Imprime los nombres de los estudiantes de Gryffindor
+`,
+            solutionCode: `students = [
+    {"name": "Harry", "house": "Gryffindor"},
+    {"name": "Draco", "house": "Slytherin"},
+    {"name": "Hermione", "house": "Gryffindor"},
+]
+
+for s in students:
+    if s["house"] == "Gryffindor":
+        print(s["name"])
+`,
+            solutionExplanation: '1. `for s in students` itera directamente sobre cada diccionario.\n2. `s["house"]` accede al valor asociado a la clave.'
+          }
+        ]
+      }
+    ],
     officialExercise: {
-      title: 'Problem Set 6: DNA Profiling in Python',
+      title: 'Problem Set 6: Sentimental / DNA (Identificación Forense)',
       notesUrl: 'https://cs50.harvard.edu/x/notes/6/',
       psetUrl: 'https://cs50.harvard.edu/x/psets/6/dna/',
-      goal: 'Analizar una cadena de ADN (`sequence`) en Python para identificar cuántas veces aparece un marcador genético corto (`subsequence = "AGATC"`).',
+      goal: 'Identificar a una persona a partir de secuencias de ADN contando repeticiones consecutivas (STRs) en Python.',
       specs: [
-        'Completa la función `count_occurrences(seq, sub)` utilizando el método `.count(sub)` de Python o recorriendo la cadena con una ventana del tamaño `len(sub)`.',
-        'Devuelve el número entero total de apariciones e imprímelo por terminal.',
+        'Abre y lee archivos CSV y de texto en Python con `csv.DictReader`.',
+        'Calcula la racha más larga de cada STR en la secuencia de ADN.',
+        'Compara los conteos con la base de datos de personas e imprime el nombre coincidente.',
       ],
-      usageExample: `$ python3 dna.py
-STR: AGATC
-Repeticiones encontradas: 3`,
+      usageExample: `$ python dna.py databases/small.csv sequences/1.txt
+Bob`,
       check50: 'check50 cs50/problems/2024/x/dna',
       submit50: 'submit50 cs50/problems/2024/x/dna',
     },
     simpleVideoExplanations: [
       {
-        chapterTitle: 'Inicio del vídeo · Pasar de C a Python',
-        analogyTitle: '🚗 Analogía de pasar de un coche con marchas manuales a uno automático',
+        chapterTitle: 'Mitad del vídeo · La libertad de Python',
+        analogyTitle: '🚲 De conducir un coche con palanca de cambios manual (C) a una bicicleta eléctrica automática (Python)',
         paragraphs: [
-          'Aprender C primero fue como aprender a conducir con cambio manual: entendiste cómo funcionan el embrague y las revoluciones del motor (la memoria y los tipos de datos). Python es un coche automático moderno: sigue teniendo un motor por debajo, pero cambia de marcha y gestiona la memoria por ti.',
-          'Lo que en C te llevaba diez líneas con llaves `{}` y puntos y comas `;`, en Python se escribe casi como una frase normal en inglés.',
-        ],
-      },
-      {
-        chapterTitle: 'Segunda mitad del vídeo · Buscar patrones en el ADN',
-        analogyTitle: '🔍 Analogía de deslizar una lupa de 5 letras sobre una tira de papel',
-        paragraphs: [
-          'El ADN humano se representa con cuatro letras (`A`, `C`, `G`, `T`). Para identificar a una persona en un laboratorio forense, los científicos cuentan cuántas veces se repite un trocito concreto, como `"AGATC"`.',
-          'En Python puedes deslizar una ventana de 5 letras a lo largo de toda la tira de texto o usar sus herramientas de cadenas para contar al instante cuántas veces aparece ese patrón.',
+          'En C tenías que vigilar el motor, los frenos y la gasolina (la memoria y los tipos).',
+          'Python hace todo ese mantenimiento por ti en segundo plano para que tú solo tengas que preocuparte del destino al que quieres llegar.',
         ],
       },
     ],
@@ -555,54 +1503,110 @@ Repeticiones encontradas: 3`,
   {
     id: 'module-7',
     weekLabel: 'Clase 7',
-    title: 'SQL, Bases de Datos Relacionales y Prevención de SQL Injection',
-    subtitle: 'Hojas de cálculo con superpoderes y preguntas en lenguaje SQL',
-    videoUrl: 'https://www.youtube.com/watch?v=VnfMRaZUSrc',
-    youtubeId: 'VnfMRaZUSrc',
+    title: 'SQL: Bases de Datos Relacionales y Consultas',
+    subtitle: 'Consultas declarativas, índices, llaves foráneas y filtrado con SQLite',
+    videoUrl: 'https://www.youtube.com/watch?v=F_fP_pY2l_M',
+    youtubeId: 'vFYbm0h15rU',
     language: 'sql',
     verifiedTopics:
-      'Tablas de bases de datos (filas y columnas), consultas SELECT, filtros WHERE, ordenamiento ORDER BY, relaciones entre tablas (JOIN) y seguridad frente a SQL Injection.',
+      'Bases de datos relacionales, tablas, filas y columnas, sintaxis declarativa de SQL (SELECT, FROM, WHERE, ORDER BY, LIMIT), funciones de agregación (COUNT, AVG, SUM), JOINs entre múltiples tablas, llaves primarias y foráneas, e índices para acelerar búsquedas.',
     realWorldUseCase:
-      'Guardar y consultar millones de clientes, películas o pedidos al instante pidiendo exactamente los datos que necesitas.',
+      'Gestionar y consultar millones de registros de usuarios, pedidos o productos con integridad garantizada.',
     feynmanPrompt:
-      '¿Qué diferencia hay entre indicar qué datos quieres (`SELECT ... WHERE`) en SQL frente a programar un bucle manual en C?',
-    starterChallengeTitle: 'Problem Set 7: Movies & Fiftyville (Consultas Relacionales SQL)',
-    starterCode: `-- CS50 Clase 7 — Consultas SQL sobre SQLite
--- Tablas disponibles en memoria:
--- students (id, name, house, grade)
--- courses (id, title, week)
--- TODO: Selecciona name, house y grade de los estudiantes con grade >= 90
--- ordenados por grade de forma descendente (ORDER BY grade DESC).
+      '¿En qué se diferencia pedirle a una base de datos lo que quieres (SQL declarativo) de programar el paso a paso en C o Python (imperativo)?',
+    starterChallengeTitle: 'Problem Set 7: Fiftyville (Misterio de Deducción con SQL)',
+    starterCode: `-- CS50 Clase 7 — Consulta Relacional en SQL
+-- Tabla disponible: students (id, name, house, grade)
 
-SELECT name, house, grade FROM students;
+SELECT name, house, grade
+FROM students
+WHERE house = 'Gryffindor' AND grade >= 90
+ORDER BY grade DESC;
 `,
     allowedConceptsConstraint:
-      'SOLO puedes hablar de los conceptos de la Clase 7: tablas SQL, SELECT, FROM, WHERE, ORDER BY, COUNT, JOIN e inyección SQL.',
+      'SOLO puedes usar conceptos de la Clase 7: consultas SQL con SELECT, WHERE, ORDER BY, GROUP BY, HAVING, JOINs y transacciones con SQLite.',
+    chapters: [
+      {
+        id: 'c7-ch1',
+        chapterNumber: 1,
+        title: 'Consultas Básicas (SELECT, WHERE, ORDER BY)',
+        timeRange: '00:00 - 00:40',
+        startSeconds: 0,
+        summary: 'Aprende a filtrar y ordenar filas de una base de datos especificando condiciones lógicas.',
+        microExercises: [
+          {
+            id: 'c7-ex1',
+            title: 'Filtrar Estudiantes con Calificación Sobresaliente',
+            duration: '5 min',
+            prompt: 'Escribe una consulta SQL que devuelva el nombre y la nota de los alumnos con nota superior o igual a 95 ordenados de mayor a menor.',
+            language: 'sql',
+            starterCode: `-- TODO: Selecciona name y grade de la tabla students donde grade >= 95 ordenado descendente
+SELECT name, grade
+FROM students
+WHERE grade >= 95
+ORDER BY grade DESC;
+`,
+            solutionCode: `SELECT name, grade
+FROM students
+WHERE grade >= 95
+ORDER BY grade DESC;
+`,
+            solutionExplanation: '1. `WHERE grade >= 95` filtra las filas antes de presentarlas.\n2. `ORDER BY grade DESC` ordena los resultados de mayor a menor nota.'
+          }
+        ]
+      },
+      {
+        id: 'c7-ch2',
+        chapterNumber: 2,
+        title: 'Funciones de Agregación y Agrupación (COUNT, GROUP BY)',
+        timeRange: '00:40 - Final',
+        startSeconds: 2400,
+        summary: 'Cómo resumir datos numéricos calculando promedios, conteos y totales por categoría.',
+        microExercises: [
+          {
+            id: 'c7-ex2',
+            title: 'Contar Estudiantes por Casa en Hogwarts',
+            duration: '5 min',
+            prompt: 'Escribe una consulta que cuente cuántos alumnos hay en cada casa usando `COUNT(*)` y `GROUP BY house`.',
+            language: 'sql',
+            starterCode: `-- TODO: Cuenta los estudiantes por casa
+SELECT house, COUNT(*) AS total
+FROM students
+GROUP BY house;
+`,
+            solutionCode: `SELECT house, COUNT(*) AS total
+FROM students
+GROUP BY house;
+`,
+            solutionExplanation: '1. `GROUP BY house` divide los datos en grupos según la casa.\n2. `COUNT(*)` calcula cuántas filas pertenecen a cada grupo.'
+          }
+        ]
+      }
+    ],
     officialExercise: {
-      title: 'Problem Set 7: SQL Queries (Movies & Fiftyville)',
+      title: 'Problem Set 7: Fiftyville (El Robo del Pato de CS50)',
       notesUrl: 'https://cs50.harvard.edu/x/notes/7/',
-      psetUrl: 'https://cs50.harvard.edu/x/psets/7/movies/',
-      goal: 'Escribir una consulta en SQL (`SELECT`, `WHERE`, `ORDER BY`) sobre la base de datos SQLite para filtrar los alumnos con nota mayor o igual a 90 y ordenarlos de mayor a menor.',
+      psetUrl: 'https://cs50.harvard.edu/x/psets/7/fiftyville/',
+      goal: 'Resolver el misterio del robo del pato en la ciudad de Fiftyville cruzando registros de cajeros automáticos, llamadas telefónicas, cámaras de seguridad y vuelos en SQL.',
       specs: [
-        'Consulta la tabla `students (id, name, house, grade)`.',
-        'Añade la cláusula `WHERE grade >= 90` para filtrar únicamente los alumnos sobresalientes.',
-        'Añade `ORDER BY grade DESC` al final de la consulta antes del punto y coma.',
+        'Consulta las entrevistas de los testigos (`crime_scene_reports` e `interviews`).',
+        'Cruza los retiros de cajeros (`atm_transactions`) con los registros de matrículas en el parking (`bakery_security_logs`).',
+        'Identifica al culpable, la ciudad a la que escapó y a su cómplice que compró el billete de avión.',
       ],
-      usageExample: `name | house | grade
-------------------------
-Hermione | Gryffindor | 100
-Luna | Ravenclaw | 96
-Harry | Gryffindor | 92`,
-      check50: 'check50 cs50/problems/2024/x/movies',
-      submit50: 'submit50 cs50/problems/2024/x/movies',
+      usageExample: `$ sqlite3 fiftyville.db
+The THIEF is: Bruce
+The city the thief ESCAPED TO: New York City
+The ACCOMPLICE is: Robin`,
+      check50: 'check50 cs50/problems/2024/x/fiftyville',
+      submit50: 'submit50 cs50/problems/2024/x/fiftyville',
     },
     simpleVideoExplanations: [
       {
-        chapterTitle: 'Inicio del vídeo · ¿Qué es SQL y una Base de Datos Relacional?',
-        analogyTitle: '📋 Analogía de pedirle un plato al camarero en vez de entrar a cocinarlo',
+        chapterTitle: 'Mitad del vídeo · ¿Qué es una base de datos relacional?',
+        analogyTitle: '📊 Analogía de varias hojas de cálculo de Excel conectadas por números de identificación',
         paragraphs: [
-          'En C o Python tú eres el cocinero: tienes que escribir el bucle paso a paso para abrir el archivo y mirar fila por fila. En SQL tú eres el cliente en la mesa: simplemente le dices al camarero "tráeme el nombre y la nota de los alumnos que tengan más de un 90, ordenados de mayor a menor".',
-          'El motor de la base de datos decide por sí solo la forma más rápida de buscar en las tablas y te entrega la bandeja con el resultado.',
+          'En vez de repetir la dirección de un cliente en cada factura, guardas al cliente en una tabla y las facturas en otra con una etiqueta que apunta al cliente.',
+          'SQL es el idioma con el que le pides al bibliotecario del ordenador que junte las dos hojas al instante.',
         ],
       },
     ],
@@ -610,57 +1614,124 @@ Harry | Gryffindor | 92`,
   {
     id: 'module-8',
     weekLabel: 'Clase 8',
-    title: 'HTML, CSS, JavaScript y el Modelo Cliente-Servidor (HTTP)',
-    subtitle: 'El esqueleto, la pintura y los músculos de una página web interactiva',
-    videoUrl: 'https://www.youtube.com/watch?v=3Ph5G_sfrFM',
-    youtubeId: '3Ph5G_sfrFM',
+    title: 'HTML, CSS y JavaScript: Frontend y la Web',
+    subtitle: 'Estructura semántica, selectores CSS, el DOM y eventos interactivos',
+    videoUrl: 'https://www.youtube.com/watch?v=F_fP_pY2l_M',
+    youtubeId: '3rOwhP_c7g8',
     language: 'javascript',
     verifiedTopics:
-      'Cómo viajan los mensajes por Internet (HTTP), estructura de una página (HTML), diseño visual (CSS) y lógica interactiva en el navegador con JavaScript.',
+      'Protocolos de internet (TCP/IP, DNS, HTTP), estructura de páginas con HTML5, estilos con CSS3 y diseño responsivo, programación interactiva en el navegador con JavaScript y manipulación del Document Object Model (DOM).',
     realWorldUseCase:
-      'Comprobar que los datos que un usuario escribe en un formulario web sean limpios y correctos antes de enviarlos.',
+      'Construir interfaces visuales modernas que funcionen en cualquier móvil o navegador web.',
     feynmanPrompt:
-      'Si una página web fuera una casa, ¿qué parte sería el HTML, qué parte el CSS y qué parte el JavaScript?',
-    starterChallengeTitle: 'Problem Set 8: Trivia & Validación de Payloads en JavaScript',
-    starterCode: `// CS50 Clase 8 — JavaScript & Validación Cliente-Servidor
-const submission = {
-  username: "  harvard_cs50  ",
-  answer: "binary search",
-  score: "95"
-};
+      '¿Qué papel juega cada una de las tres tecnologías web (HTML, CSS y JS) en un edificio?',
+    starterChallengeTitle: 'Problem Set 8: Homepage & Trivia Interactiva',
+    starterCode: `// CS50 Clase 8 — Lógica Interactiva con JavaScript
+function checkAnswer(selectedOption, correctAnswer) {
+    if (selectedOption === correctAnswer) {
+        return "¡Correcto! Respuesta acertada.";
+    } else {
+        return "Incorrecto. Vuelve a intentarlo.";
+    }
+}
 
-// TODO:
-// 1. Limpia los espacios de submission.username con .trim()
-// 2. Convierte submission.score a entero con Number(submission.score)
-// 3. Verifica si answer === "binary search" e imprime el objeto validado
-
-console.log("Submission:", submission);
+console.log(checkAnswer("Paris", "Paris"));
 `,
     allowedConceptsConstraint:
-      'SOLO puedes hablar de los conceptos de la Clase 8: Internet/HTTP, HTML, CSS y JavaScript básico (objetos, strings, trim, Number y condicionales).',
+      'SOLO puedes usar conceptos de la Clase 8: HTML semántico, CSS, selectores, funciones JavaScript, eventos DOM y peticiones fetch.',
+    chapters: [
+      {
+        id: 'c8-ch1',
+        chapterNumber: 1,
+        title: 'Estructura HTML y Estilos CSS',
+        timeRange: '00:00 - 00:45',
+        startSeconds: 0,
+        summary: 'Cómo los navegadores leen el árbol de etiquetas HTML y aplican reglas de estilo en cascada.',
+        microExercises: [
+          {
+            id: 'c8-ex1',
+            title: 'Validador de Formatos HTML',
+            duration: '5 min',
+            prompt: 'Escribe una función en JavaScript que verifique si una cadena contiene etiquetas de apertura `<button>` y cierre `</button>`.',
+            language: 'javascript',
+            starterCode: `function hasButton(html) {
+    // TODO: Comprueba si html incluye "<button>" y "</button>"
+    return html.includes("<button>") && html.includes("</button>");
+}
+
+console.log(hasButton("<button>Haz clic</button>"));
+`,
+            solutionCode: `function hasButton(html) {
+    return html.includes("<button>") && html.includes("</button>");
+}
+
+console.log(hasButton("<button>Haz clic</button>"));
+`,
+            solutionExplanation: '1. `html.includes` comprueba la presencia de subcadenas específicas dentro de un texto.'
+          }
+        ]
+      },
+      {
+        id: 'c8-ch2',
+        chapterNumber: 2,
+        title: 'JavaScript y Eventos del DOM',
+        timeRange: '00:45 - Final',
+        startSeconds: 2700,
+        summary: 'Responde a clics, pulsaciones de teclas y cambios de formulario actualizando la página en tiempo real.',
+        microExercises: [
+          {
+            id: 'c8-ex2',
+            title: 'Manejador de Respuestas de Trivia',
+            duration: '5 min',
+            prompt: 'Crea una función que devuelva un objeto con `{ correct: true, score: score + 1 }` si la respuesta elegida coincide con la correcta.',
+            language: 'javascript',
+            starterCode: `function evaluateAnswer(userPick, correctPick, currentScore) {
+    // TODO: Compara userPick con correctPick y actualiza la puntuación
+    if (userPick === correctPick) {
+        return { correct: true, score: currentScore + 1 };
+    }
+    return { correct: false, score: currentScore };
+}
+
+console.log(evaluateAnswer("C", "C", 0));
+`,
+            solutionCode: `function evaluateAnswer(userPick, correctPick, currentScore) {
+    if (userPick === correctPick) {
+        return { correct: true, score: currentScore + 1 };
+    }
+    return { correct: false, score: currentScore };
+}
+
+console.log(evaluateAnswer("C", "C", 0));
+`,
+            solutionExplanation: '1. Retornar un objeto estructurado permite que la interfaz actualice tanto el color visual como el marcador de puntos.'
+          }
+        ]
+      }
+    ],
     officialExercise: {
-      title: 'Problem Set 8: Trivia & Client-Side Validation',
+      title: 'Problem Set 8: Trivia (Juego de Preguntas con DOM)',
       notesUrl: 'https://cs50.harvard.edu/x/notes/8/',
       psetUrl: 'https://cs50.harvard.edu/x/psets/8/trivia/',
-      goal: 'Sanitizar y validar en JavaScript los datos de respuesta de un formulario (`username`, `answer`, `score`).',
+      goal: 'Crear una página web interactiva con preguntas de opción múltiple y respuesta libre que cambie de color a verde o rojo al responder.',
       specs: [
-        'Elimina los espacios sobrantes de `submission.username` usando `.trim()`.',
-        'Convierte `submission.score` de texto (`"95"`) a número (`95`) usando `Number(submission.score)`.',
-        'Comprueba con `if` si `submission.answer === "binary search"` e imprime `"Correcto!"` junto con el objeto limpio.',
+        'Añade botones para preguntas de selección múltiple.',
+        'Usa `addEventListener` para capturar el clic y pintar el botón de verde si es correcto o rojo si es incorrecto.',
+        'Incluye un campo de texto con validación de respuesta libre.',
       ],
-      usageExample: `$ node main.mjs
-Correcto!
-{ username: 'harvard_cs50', answer: 'binary search', score: 95 }`,
+      usageExample: `$ open index.html
+Boton verde al acertar, rojo al fallar.`,
       check50: 'check50 cs50/problems/2024/x/trivia',
       submit50: 'submit50 cs50/problems/2024/x/trivia',
     },
     simpleVideoExplanations: [
       {
-        chapterTitle: 'Mitad del vídeo · HTML, CSS y JavaScript explicados sin tecnicismos',
-        analogyTitle: '🏠 Analogía de los ladrillos, la pintura y la electricidad de una casa',
+        chapterTitle: 'Mitad del vídeo · La trinidad de la Web',
+        analogyTitle: '🏗️ Analogía del edificio: Vigas, Pintura y Electricidad',
         paragraphs: [
-          'Toda página web se construye con tres piezas: HTML son las paredes y puertas (dice dónde hay un título o un botón); CSS es la pintura y la decoración (dice de qué color y tamaño se ve cada botón).',
-          'JavaScript es la instalación eléctrica y los motores: hace que cuando pulses un interruptor (un botón en la pantalla), ocurra una acción inmediata como comprobar si acertaste una pregunta del Trivia.',
+          'HTML son los ladrillos y las vigas: define qué es un encabezado, un párrafo o un botón.',
+          'CSS es la pintura, el diseño y las luces: decide qué tamaño, color y espaciado tiene cada habitación.',
+          'JavaScript es la instalación eléctrica y los sensores: hace que al pulsar un interruptor se abra la puerta o suene una alarma.',
         ],
       },
     ],
@@ -668,36 +1739,76 @@ Correcto!
   {
     id: 'module-9',
     weekLabel: 'Clase 9',
-    title: 'Flask, Backend, APIs, Formularios y Sesiones',
-    subtitle: 'El recepcionista de seguridad en el servidor que valida cada operación',
-    videoUrl: 'https://www.youtube.com/watch?v=i_GmZgveqpw',
-    youtubeId: 'i_GmZgveqpw',
+    title: 'Flask: Backend, Rutas y Validación en Servidor',
+    subtitle: 'Arquitectura cliente-servidor, formularios POST, sesiones y C$50 Finance',
+    videoUrl: 'https://www.youtube.com/watch?v=F_fP_pY2l_M',
+    youtubeId: '7rPZ_a5t_qg',
     language: 'python',
     verifiedTopics:
-      'Aplicaciones web dinámicas con Python y Flask, rutas en el servidor, sesiones de usuario y por qué siempre hay que validar el dinero y los datos en el servidor.',
+      'Frameworks web (Flask), modelo MVC / rutas con decoradores (@app.route), métodos HTTP (GET vs POST), renderizado de plantillas Jinja2, cookies y variables de sesión de usuario, y validación defensiva en el backend con C$50 Finance.',
     realWorldUseCase:
-      'Evitar que un usuario compre acciones sin saldo o envíe cantidades negativas modificando la página desde su navegador.',
+      'Construir aplicaciones completas con autenticación segura y transacciones en base de datos.',
     feynmanPrompt:
-      '¿Por qué un banco jamás comprueba si tienes saldo únicamente en la pantalla de tu móvil, sino dentro de su propio servidor central?',
-    starterChallengeTitle: 'Problem Set 9: C$50 Finance (Validación de Transacciones en Servidor)',
-    starterCode: `# CS50 Clase 9 — C$50 Finance Backend Validator
-# Valida una orden de compra de acciones en el servidor antes de tocar la base de datos.
+      '¿Por qué nunca debes confiar en los datos que envía el navegador del usuario al servidor?',
+    starterChallengeTitle: 'Problem Set 9: C$50 Finance (Validador de Compras en Servidor)',
+    starterCode: `# CS50 Clase 9 — Backend con Python y Flask (Validación en Servidor)
 
-user_cash = 10000.00
-stock_price = 185.50
-
-def execute_buy_order(symbol, shares, cash, price):
+def execute_buy_order(symbol: str, shares: int, cash: float, price: float):
     # TODO:
-    # 1. Verifica que 'symbol' no esté vacío y que 'shares' sea un int > 0
+    # 1. Valida que symbol no esté vacío y que shares > 0
     # 2. Calcula total_cost = shares * price
     # 3. Si total_cost > cash, devuelve {"ok": False, "error": "Fondos insuficientes"}
-    # 4. Si es válido, devuelve {"ok": True, "total_cost": total_cost, "remaining_cash": cash - total_cost}
-    return {"ok": False, "error": "Pendiente de implementar"}
+    # 4. En caso contrario devuelve {"ok": True, "total_cost": total_cost, "remaining_cash": round(cash - total_cost, 2)}
+    return {"ok": False, "error": "No implementado"}
 
-print(execute_buy_order("AAPL", 10, user_cash, stock_price))
+result = execute_buy_order("AAPL", 10, 10000.0, 185.50)
+print(result)
 `,
     allowedConceptsConstraint:
       'SOLO puedes hablar de los conceptos de la Clase 9: cliente vs servidor (backend con Python/Flask), validación de compras en C$50 Finance, diccionarios y condicionales.',
+    chapters: [
+      {
+        id: 'c9-ch1',
+        chapterNumber: 1,
+        title: 'Arquitectura Cliente-Servidor y Rutas HTTP',
+        timeRange: '00:00 - 00:45',
+        startSeconds: 0,
+        summary: 'Cómo viajan las peticiones GET y POST desde el navegador hasta los endpoints de Flask en el servidor.',
+        microExercises: [
+          {
+            id: 'c9-ex1',
+            title: 'Validador de Transacciones Financieras',
+            duration: '5 min',
+            prompt: 'Implementa una función en Python que verifique que el número de acciones sea un entero estrictamente positivo antes de procesar una compra.',
+            language: 'python',
+            starterCode: `def validate_shares(shares_str):
+    # TODO: Devuelve True si es un número entero positivo > 0, de lo contrario False
+    try:
+        shares = int(shares_str)
+        return shares > 0
+    except ValueError:
+        return False
+
+print("Es valido 5:", validate_shares("5"))
+print("Es valido -2:", validate_shares("-2"))
+print("Es valido abc:", validate_shares("abc"))
+`,
+            solutionCode: `def validate_shares(shares_str):
+    try:
+        shares = int(shares_str)
+        return shares > 0
+    except ValueError:
+        return False
+
+print("Es valido 5:", validate_shares("5"))
+print("Es valido -2:", validate_shares("-2"))
+print("Es valido abc:", validate_shares("abc"))
+`,
+            solutionExplanation: '1. `int(shares_str)` convierte texto a número, lanzando ValueError si contiene letras o decimales.\n2. `shares > 0` previene fraudes donde un usuario intente comprar cantidades negativas.'
+          }
+        ]
+      }
+    ],
     officialExercise: {
       title: 'Problem Set 9: C$50 Finance (Server-Side Transaction Validator)',
       notesUrl: 'https://cs50.harvard.edu/x/notes/9/',
@@ -751,7 +1862,16 @@ def validate_ai_response(raw_json):
     # 2. Verifica que contenga las claves "intent", "confidence" y "topic"
     # 3. Comprueba que 0.0 <= data["confidence"] <= 1.0
     # 4. Devuelve (True, data) si es válido o (False, mensaje_error)
-    return False, "Pendiente de validar"
+    try:
+        data = json.loads(raw_json)
+        for key in ["intent", "confidence", "topic"]:
+            if key not in data:
+                return False, f"Falta la clave {key}"
+        if not (0.0 <= data["confidence"] <= 1.0):
+            return False, "Confianza fuera de rango"
+        return True, data
+    except Exception as e:
+        return False, str(e)
 
 is_valid, result = validate_ai_response(raw_llm_output)
 print("Valid:", is_valid)
@@ -759,6 +1879,49 @@ print("Result:", result)
 `,
     allowedConceptsConstraint:
       'SOLO puedes hablar de los conceptos de la Clase 10: fundamentos de IA explicados en CS50, predicción de palabras, validación de JSON con json.loads y try/except en Python.',
+    chapters: [
+      {
+        id: 'c10-ch1',
+        chapterNumber: 1,
+        title: 'Modelos de Lenguaje (LLMs) y Validación Defensiva',
+        timeRange: '00:00 - Final',
+        startSeconds: 0,
+        summary: 'Cómo los modelos neuronales generan texto predictivo y por qué es imprescindible validar sus salidas JSON antes de persistirlas.',
+        microExercises: [
+          {
+            id: 'c10-ex1',
+            title: 'Validador de JSON Schema con try/except',
+            duration: '5 min',
+            prompt: 'Escribe una función en Python que intente parsear una cadena con `json.loads` y capture cualquier `json.JSONDecodeError`.',
+            language: 'python',
+            starterCode: `import json
+
+def parse_safe(payload):
+    # TODO: Usa try / except para parsear payload de forma segura
+    try:
+        return json.loads(payload)
+    except Exception:
+        return None
+
+print(parse_safe('{"ok": true}'))
+print(parse_safe('JSON INVALIDO'))
+`,
+            solutionCode: `import json
+
+def parse_safe(payload):
+    try:
+        return json.loads(payload)
+    except Exception:
+        return None
+
+print(parse_safe('{"ok": true}'))
+print(parse_safe('JSON INVALIDO'))
+`,
+            solutionExplanation: '1. `try / except` intercepta fallos de sintaxis sin detener la aplicación bruscamente.\n2. Es el estándar de oro en aplicaciones que consumen APIs de modelos de lenguaje.'
+          }
+        ]
+      }
+    ],
     officialExercise: {
       title: 'CS50 Artificial Intelligence & Final Project Validator',
       notesUrl: 'https://cs50.harvard.edu/x/notes/ai/',

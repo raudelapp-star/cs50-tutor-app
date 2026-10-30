@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="96" fill="#020617"/>
+  <rect x="32" y="32" width="448" height="448" rx="80" fill="#0f172a" stroke="#fbbf24" stroke-width="8"/>
+  <text x="256" y="290" text-anchor="middle" font-family="monospace, sans-serif" font-weight="900" font-size="140" fill="#fbbf24">CS50</text>
+  <text x="256" y="360" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="36" fill="#e2e8f0">EN ESPAÑOL</text>
+</svg>
